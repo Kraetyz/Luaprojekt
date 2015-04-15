@@ -27,131 +27,29 @@ glm::mat4 Projection;
 
 #define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
-void CameraSetup()
-{
-	static float rot = 0.0f;
-	Projection = glm::perspective(3.14159f*0.45f, 640.0f / 480.0f, 0.5f, 20.0f); //Projection matrix
-
-	View = glm::lookAt(
-		glm::vec3(0, 0, 2),
-		glm::vec3(0, 0, 0),
-		glm::vec3(0, 1, 0)
-		); //View matrix
-	Model = glm::mat4(cos(rot), 0.0f, sin(rot), 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		-sin(rot), 0.0f, cos(rot), 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);  // Model matrix (World matrix?)
-	rot += 0.0004f;
-}
-
-void CreateTexture()
-{
-	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-}
-
 void CreateShaders()
 {
 	const char* vertex_shader = R"(
 		#version 400
 		layout(location = 0) in vec3 vertex_position;
-		layout(location = 1) in vec2 vertex_UV;
+		layout(location = 1) in vec3 vertex_color;
 		
-		out vec2 UVcoord;
+		out vec2 color;
 		
 		void main () {
-			UVcoord = vertex_UV;
+			color = vertex_color;
 			gl_Position = vec4(vertex_position, 1.0);
-		}
-	)";
-
-	const char* geometry_shader = R"(
-		#version 400
-		layout(triangles) in;
-		layout(triangle_strip, max_vertices = 8) out;
-		in gl_PerVertex
-		{
-			vec4 gl_Position;
-			float gl_PointSize;
-			float gl_ClipDistance[];
-		} gl_in[];
-
-		uniform mat4 View;
-		uniform mat4 Projection;
-		uniform mat4 Model;
-
-		in vec2 UVcoord[];
-		out vec2 UV;
-		out vec3 normalOut;
-		out vec4 position;
-
-		void main() {
-			vec3 vector0 = vec3(gl_in[1].gl_Position-gl_in[0].gl_Position);
-			vec3 vector1 = vec3(gl_in[2].gl_Position-gl_in[0].gl_Position);
-			vec3 normal = normalize(cross(vector0, vector1));
-			mat3 normalMatrix = transpose(inverse(mat3(Model)));
-			normalOut = normalize(normalMatrix*normal);
-
-
-			for(int i = 0; i < gl_in.length(); i++)
-			{
-				UV = UVcoord[i];
-				gl_Position = Model*gl_in[i].gl_Position;
-				gl_Position = View*gl_Position;
-				gl_Position = Projection*gl_Position;
-				position = Model*gl_in[i].gl_Position;
-				position = View*position;
-				EmitVertex();
-			}
-			EndPrimitive();
-
-			for(int i = 0; i < gl_in.length(); i++)
-			{
-				UV = UVcoord[i];
-				gl_Position = Model*(gl_in[i].gl_Position-vec4(0,0,1,0));
-				gl_Position = View*gl_Position;
-				gl_Position = Projection*gl_Position;
-				position = Model*(gl_in[i].gl_Position-vec4(0,0,1,0));
-				position = View*position;
-				EmitVertex();
-			}
-			EndPrimitive();
 		}
 	)";
 
 	const char* fragment_shader = R"(
 		#version 400
-		in vec2 UV;
-		in vec3 normalOut;
-		in vec4 position;
+		in vec3 color;
 
-		uniform sampler2D texSampler;
-		uniform mat3 Light;
 		out vec4 fragment_color;
 
-		vec3 addShit()
-		{
-			vec3 pos = vec3(position);
-			vec3 n = normalize(normalOut);
-			vec3 s = normalize(Light[0] - pos);
-			vec3 v = normalize(-pos);
-			vec3 r = reflect(-s, n);
-			vec3 diffuse = Light[2] * max(dot(s,n), 0.0);
-			vec3 specular = vec3(1.0, 1.0, 1.0);
-			float SHINYPOWER = 2000.0f;
-			vec3 ambient = vec3(0.2, 0.2, 0.2);
-			vec3 specularLight = specular * pow(max(dot(r,v), 0.0), SHINYPOWER);
-			return Light[1] * (ambient + diffuse + specularLight);
-		}
 		void main () {
-			vec4 text = texture(texSampler, vec2(UV.s, 1-UV.t));
-			fragment_color = text * vec4(addShit(),1.0);
+			fragment_color = vec4(color, 1.0);
 		}
 	)";
 	//create vertex shader
@@ -164,15 +62,9 @@ void CreateShaders()
 	glShaderSource(fs, 1, &fragment_shader, nullptr);
 	glCompileShader(fs);
 
-	//Geoshade
-	GLuint gs = glCreateShader(GL_GEOMETRY_SHADER);
-	glShaderSource(gs, 1, &geometry_shader, nullptr);
-	glCompileShader(gs);
-
 	//link shader program (connect vs and ps)
 	gShaderProgram = glCreateProgram();
 	glAttachShader(gShaderProgram, vs);
-	glAttachShader(gShaderProgram, gs);
 	glAttachShader(gShaderProgram, fs);
 	glLinkProgram(gShaderProgram);
 }
@@ -183,22 +75,22 @@ void CreateTriangleData()
 	struct TriangleVertex
 	{
 		float x, y, z;
-		float u, v;
+		float r,g,b;
 	}
 	triangleVertices[4] =
 	{
 		-w, 0.5f, 1.0f,	//v0
-		0.0f, 1.0f,
+		0.0f, 1.0f, 1.0,
 
 		-w, -0.5f, 1.0f, //v1
-		0.0f, 0.0f,
+		0.0f, 0.0f, 1.0,
 
 		w, 0.5f, 1.0f,	//v2
-		1.0f, 1.0f,
+		1.0f, 1.0f, 0.0,
 
 
 		w, -0.5f, 1.0f,	//v3
-		1.0f, 0.0f
+		1.0f, 0.0f, 0.0f
 
 	};
 	//create buffer and set data
@@ -213,8 +105,8 @@ void CreateTriangleData()
 	glEnableVertexAttribArray(1);
 	GLuint vertexPos = glGetAttribLocation(gShaderProgram, "vertex_position");
 	glVertexAttribPointer(vertexPos, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleVertex), BUFFER_OFFSET(0));
-	GLuint vertexUV = glGetAttribLocation(gShaderProgram, "vertex_UV");
-	glVertexAttribPointer(vertexUV, 2, GL_FLOAT, GL_FALSE, sizeof(TriangleVertex), BUFFER_OFFSET(sizeof(float) * 3));
+	GLuint vertexUV = glGetAttribLocation(gShaderProgram, "vertex_color");
+	glVertexAttribPointer(vertexUV, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleVertex), BUFFER_OFFSET(sizeof(float) * 3));
 }
 
 void SetViewport()
@@ -231,7 +123,6 @@ void Render()
 	glBindTexture(GL_TEXTURE_2D, tex); //Bind dat shit
 	glBindVertexArray(gVertexAttribute);
 
-	CameraSetup();
 	GLuint ViewID = glGetUniformLocation(gShaderProgram, "View");
 	glUniformMatrix4fv(ViewID, 1, GL_FALSE, &View[0][0]);
 	GLuint ProjID = glGetUniformLocation(gShaderProgram, "Projection");
@@ -259,8 +150,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		glDepthFunc(GL_LEQUAL);
 
 		SetViewport(); //4. Sätt viewport
-
-		CreateTexture();
 
 		CreateShaders(); //5. Skapa vertex- och fragment-shaders
 
