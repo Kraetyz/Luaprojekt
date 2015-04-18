@@ -15,6 +15,7 @@ public:
 	void Render(Button* toRender);
 	void Render(GameObject* toRender);
 	void setProgram();
+	void setBtnProgram();
 };
 
 #endif

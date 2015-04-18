@@ -38,7 +38,7 @@ ShaderHolder::ShaderHolder()
 	glAttachShader(program, fs);
 	glLinkProgram(program);
 
-	vertex_shader = R"(
+	const char* btn_vertex_shader = R"(
 		#version 400
 		layout(location = 0) in vec2 vertex_position;
 		out vec2 UV;
@@ -65,7 +65,7 @@ ShaderHolder::ShaderHolder()
 		}
 	)";
 
-	fragment_shader = R"(
+	const char* btn_fragment_shader = R"(
 		#version 400
 		out vec4 fragment_color;
 		uniform sampler2D texSampler;
@@ -74,23 +74,24 @@ ShaderHolder::ShaderHolder()
 		void main ()
 		{
 			fragment_color = texture(texSampler, vec2(UV.s, 1-UV.t));
+			//fragment_color = vec4(1, 0, 1, 1);
 		}
 	)";
 
 	//create vertex shader
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &vertex_shader, nullptr);
-	glCompileShader(vs);
+	GLuint bvs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(bvs, 1, &btn_vertex_shader, nullptr);
+	glCompileShader(bvs);
 
 	//create fragment shader
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fragment_shader, nullptr);
-	glCompileShader(fs);
+	GLuint bfs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(bfs, 1, &btn_fragment_shader, nullptr);
+	glCompileShader(bfs);
 
 	//link shader program (connect vs and ps)
 	buttonprog = glCreateProgram();
-	glAttachShader(buttonprog, vs);
-	glAttachShader(buttonprog, fs);
+	glAttachShader(buttonprog, bvs);
+	glAttachShader(buttonprog, bfs);
 	glLinkProgram(buttonprog);
 }
 

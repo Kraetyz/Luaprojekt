@@ -17,6 +17,7 @@ public:
 	bool isClicked(vec2 mousePos);
 	string getName();
 	GLuint getText();
+	bool loadBMP(std::string imagePath);
 };
 
 #endif
