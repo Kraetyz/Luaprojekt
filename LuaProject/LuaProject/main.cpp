@@ -26,18 +26,12 @@ void SetViewport()
 
 Game* game;
 
-void Render()
+void Update()
 {
+	int msg = game->update();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0, 0, 0, 1);
 	game->Render();
-	//glBindVertexArray(gVertexAttribute);
-
-	//GLuint colorID = glGetUniformLocation(shaderHolder->getProgram(), "color");
-	//glm::vec3 color = glm::vec3(1, 0, 1);
-	//glUniform3fv(colorID, 1, &color[0]);
-
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -72,7 +66,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 			else
 			{
-				Render(); //9. Rendera
+				Update(); //9. Rendera
 				SwapBuffers(hDC); //10. Växla front- och back-buffer
 			}
 		}

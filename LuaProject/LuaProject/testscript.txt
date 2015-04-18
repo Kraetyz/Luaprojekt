@@ -1,0 +1,41 @@
+function move(x, y, dir)
+	speed = 0.005;
+	if (dir == "up") then
+		return y+(speed*(1280/768));
+	end
+	if (dir == "down") then
+		return y-(speed*(1280/768));
+	end
+	if (dir == "left") then
+		return x-speed;
+	end
+	if (dir == "right") then
+		return x+speed;
+	end
+end
+
+function intersects(NWX1, NWY1, SEX1, SEY1, NWX2, NWY2, SEX2, SEY2)
+	rect1 = {};
+	rect1["x1"]= NWX1;
+	rect1["y1"] = NWY1;
+	rect1["x2"] = SEX1;
+	rect1["y2"] = SEY1;
+	rect2 = {};
+	rect2["x1"] = NWX2;
+	rect2["y1"] = NWY2;
+	rect2["x2"] = SEX2;
+	rect2["y2"] = SEY2;
+	if (rect1.y2 > rect2.y1) then
+		return false; --ouside top
+	end
+	if (rect1.x2 < rect2.x1) then
+		return false; --outside left
+	end
+	if (rect1.x1 > rect2.x2) then
+		return false; --outside right
+	end
+	if (rect1.y1 < rect2.y2) then
+		return false; --outside bottom
+	end
+	return true;
+end
