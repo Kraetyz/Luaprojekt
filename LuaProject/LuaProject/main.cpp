@@ -17,9 +17,6 @@ HWND InitWindow(HINSTANCE hInstance);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HGLRC CreateOpenGLContext(HWND wndHandle);
 
-GLuint gVertexBuffer = 0;
-GLuint gVertexAttribute = 0;
-
 #define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
 void SetViewport()

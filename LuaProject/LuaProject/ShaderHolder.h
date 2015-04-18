@@ -8,9 +8,11 @@ class ShaderHolder
 {
 private:
 	GLuint program;
+	GLuint buttonprog;
 public:
 	ShaderHolder();
 	GLuint getProgram();
+	GLuint getButtonProgram();
 };
 
 #endif
