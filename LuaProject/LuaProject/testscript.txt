@@ -1,20 +1,21 @@
-function move(x, y, dir)
-	speed = 0.005;
+function move(var, dir)
+	speed = 0.002;
 	if (dir == "up") then
-		return y+(speed*(1280/768));
+		return var+(speed*(1280/768));
 	end
 	if (dir == "down") then
-		return y-(speed*(1280/768));
+		return var-(speed*(1280/768));
 	end
 	if (dir == "left") then
-		return x-speed;
+		return var-speed;
 	end
 	if (dir == "right") then
-		return x+speed;
+		return var+speed;
 	end
 end
 
 function intersects(NWX1, NWY1, SEX1, SEY1, NWX2, NWY2, SEX2, SEY2)
+	--[[
 	rect1 = {};
 	rect1["x1"]= NWX1;
 	rect1["y1"] = NWY1;
@@ -25,16 +26,17 @@ function intersects(NWX1, NWY1, SEX1, SEY1, NWX2, NWY2, SEX2, SEY2)
 	rect2["y1"] = NWY2;
 	rect2["x2"] = SEX2;
 	rect2["y2"] = SEY2;
-	if (rect1.y2 > rect2.y1) then
+	]]--
+	if (SEY1 > NWY2) then
 		return false; --ouside top
 	end
-	if (rect1.x2 < rect2.x1) then
+	if (SEX1 < NWX2) then
 		return false; --outside left
 	end
-	if (rect1.x1 > rect2.x2) then
+	if (NWX1 > SEX2) then
 		return false; --outside right
 	end
-	if (rect1.y1 < rect2.y2) then
+	if (NWY1 < SEY2) then
 		return false; --outside bottom
 	end
 	return true;

@@ -24,8 +24,10 @@ protected:
 public:
 	GameObject();
 	GameObject(vec2 pos, vec3 rgb);
-	vec2* getCorners();
+	void getCorners(vec2 toFill[]);
 	vec3 getColor();
+	void moveX(float newX, int index);
+	void moveY(float newY, int index);
 };
 
 #endif

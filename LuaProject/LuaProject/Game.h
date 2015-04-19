@@ -18,7 +18,7 @@ private:
 	Renderer* renderer;
 	lua_State* L = 0;
 
-	bool collide(vec2* corners, vec2* enemy);
+	bool collide(vec2 corners[], vec2 enemy[]);
 public:
 	Game();
 	~Game();

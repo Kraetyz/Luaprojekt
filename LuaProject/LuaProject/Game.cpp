@@ -57,94 +57,129 @@ void Game::Render()
 int Game::update()
 {
 	int error = 0;
-	vec2* corners = allObjects[0]->getCorners();
+	vec2 corners[4];
+	allObjects[0]->getCorners(corners);
 	vec2 tempCorners[4] = { vec2(corners[0]), vec2(corners[1]), vec2(corners[2]), vec2(corners[3]) };
-	vec2* enemy = allObjects[1]->getCorners();
+	vec2 enemy[4];
+	allObjects[1]->getCorners(enemy);
 
 	if (GetKeyState('R') && GetAsyncKeyState('R'))
 	{
 		if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, 0))
 			throw;
 	}
-	for (int c = 0; c < 4; c++)
+	
+	float oldX, oldY;
+	float newX, newY;
+	if (GetKeyState('A') && GetAsyncKeyState('A'))
 	{
-		if (GetKeyState('A') && GetAsyncKeyState('A'))
+		for (int c = 0; c < 4; c++)
 		{
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].x);
-			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "left");
-			error = lua_pcall(L, 3, 1, 0);
+			error = lua_pcall(L, 2, 1, 0);
 			if (error)
 				throw;
-			corners[c].x = lua_tonumber(L, -1);
+			newX = lua_tonumber(L, -1);
 			lua_pop(L, 1);
+			allObjects[0]->moveX(newX, c);
 		}
-		if (GetKeyState('D') && GetAsyncKeyState('D'))
+	}
+	if (GetKeyState('D') && GetAsyncKeyState('D'))
+	{
+		for (int c = 0; c < 4; c++)
 		{
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].x);
-			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "right");
-			error = lua_pcall(L, 3, 1, 0);
+			error = lua_pcall(L, 2, 1, 0);
 			if (error)
 				throw;
-			corners[c].x = lua_tonumber(L, -1);
+			newX = lua_tonumber(L, -1);
 			lua_pop(L, 1);
+			allObjects[0]->moveX(newX, c);
 		}
-		if (GetKeyState('W') && GetAsyncKeyState('W'))
+	}
+	if (GetKeyState('W') && GetAsyncKeyState('W'))
+	{
+		for (int c = 0; c < 4; c++)
 		{
 			lua_getglobal(L, "move");
-			lua_pushnumber(L, corners[c].x);
 			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "up");
-			error = lua_pcall(L, 3, 1, 0);
+			error = lua_pcall(L, 2, 1, 0);
 			if (error)
 				throw;
-			corners[c].y = lua_tonumber(L, -1);
+			newY = lua_tonumber(L, -1);
 			lua_pop(L, 1);
+			allObjects[0]->moveY(newY, c);
 		}
-		if (GetKeyState('S') && GetAsyncKeyState('S'))
+	}
+	if (GetKeyState('S') && GetAsyncKeyState('S'))
+	{
+		for (int c = 0; c < 4; c++)
 		{
 			lua_getglobal(L, "move");
-			lua_pushnumber(L, corners[c].x);
 			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "down");
-			error = lua_pcall(L, 3, 1, 0);
+			error = lua_pcall(L, 2, 1, 0);
 			if (error)
 				throw;
-			corners[c].y = lua_tonumber(L, -1);
+			newY = lua_tonumber(L, -1);
 			lua_pop(L, 1);
+			allObjects[0]->moveY(newY, c);
 		}
 	}
 
+	allObjects[0]->getCorners(corners);
 	if (collide(corners, enemy))
 	{
 		for (int c = 0; c < 4; c++)
 		{
-			corners[c].x = tempCorners[c].x;
-			corners[c].y = tempCorners[c].y;
+			allObjects[0]->moveX(tempCorners[c].x, c);
+			allObjects[0]->moveY(tempCorners[c].y, c);
 		}
 	}
 
 	return 0;
 }
 
-bool Game::collide(vec2* corners, vec2* enemy)
+bool Game::collide(vec2 corners[], vec2 enemy[])
 {
-	lua_getglobal(L, "intersects");
-	lua_pushnumber(L, corners[0].x);
-	lua_pushnumber(L, corners[0].y);
-	lua_pushnumber(L, corners[3].x);
-	lua_pushnumber(L, corners[3].y);
-	lua_pushnumber(L, enemy[0].x);
-	lua_pushnumber(L, enemy[0].y);
-	lua_pushnumber(L, enemy[3].x);
-	lua_pushnumber(L, enemy[3].y);
+	//lua_getglobal(L, "intersects");
+	float cNWx = corners[NW].x;
+	float cSEx = corners[SE].x;
+	float cNWy = corners[NW].y;
+	float cSEy = corners[SE].y;
+	float eNWx = enemy[NW].x;
+	float eSEx = enemy[SE].x;
+	float eNWy = enemy[NW].y;
+	float eSEy = enemy[SE].y;
+	if (cSEy <= eNWy)
+		return false;
+	if (cSEx <= eNWx)
+		return false;
+	if (cNWx >= eSEx)
+		return false;
+	if (cNWy >= eSEy)
+		return false;
+	return true;
+/*	lua_pushnumber(L, cNWx);
+	lua_pushnumber(L, cNWy);
+	lua_pushnumber(L, cSEx);
+	lua_pushnumber(L, cSEy);
+	lua_pushnumber(L, eNWx);
+	lua_pushnumber(L, eNWy);
+	lua_pushnumber(L, eSEx);
+	lua_pushnumber(L, eSEy);
 	int error = lua_pcall(L, 8, 1, 0);
 	if (error)
 		throw;
 	bool collide = lua_toboolean(L, -1);
+	if (collide)
+		throw;
 	lua_pop(L, 1);
-	return collide;
+	*/
+	//return collide;
 }
