@@ -101,6 +101,16 @@ int Game::update()
 			allObjects[0]->moveX(newX, c);
 		}
 	}
+
+	allObjects[0]->getCorners(corners);
+	if (collide(corners, enemy))
+	{
+		for (int c = 0; c < 4; c++)
+		{
+			allObjects[0]->moveX(tempCorners[c].x, c);
+		}
+	}
+
 	if (GetKeyState('W') && GetAsyncKeyState('W'))
 	{
 		for (int c = 0; c < 4; c++)
@@ -137,7 +147,6 @@ int Game::update()
 	{
 		for (int c = 0; c < 4; c++)
 		{
-			allObjects[0]->moveX(tempCorners[c].x, c);
 			allObjects[0]->moveY(tempCorners[c].y, c);
 		}
 	}
@@ -147,7 +156,7 @@ int Game::update()
 
 bool Game::collide(vec2 corners[], vec2 enemy[])
 {
-	//lua_getglobal(L, "intersects");
+	lua_getglobal(L, "intersects");
 	float cNWx = corners[NW].x;
 	float cSEx = corners[SE].x;
 	float cNWy = corners[NW].y;
@@ -156,7 +165,7 @@ bool Game::collide(vec2 corners[], vec2 enemy[])
 	float eSEx = enemy[SE].x;
 	float eNWy = enemy[NW].y;
 	float eSEy = enemy[SE].y;
-	if (cSEy <= eNWy)
+	/*if (cSEy <= eNWy)
 		return false;
 	if (cSEx <= eNWx)
 		return false;
@@ -164,8 +173,8 @@ bool Game::collide(vec2 corners[], vec2 enemy[])
 		return false;
 	if (cNWy >= eSEy)
 		return false;
-	return true;
-/*	lua_pushnumber(L, cNWx);
+	return true;*/
+	lua_pushnumber(L, cNWx);
 	lua_pushnumber(L, cNWy);
 	lua_pushnumber(L, cSEx);
 	lua_pushnumber(L, cSEy);
@@ -176,10 +185,8 @@ bool Game::collide(vec2 corners[], vec2 enemy[])
 	int error = lua_pcall(L, 8, 1, 0);
 	if (error)
 		throw;
-	bool collide = lua_toboolean(L, -1);
-	if (collide)
-		throw;
+	bool hit = lua_toboolean(L, -1);
 	lua_pop(L, 1);
-	*/
-	//return collide;
+	
+	return hit;
 }

@@ -1,5 +1,5 @@
 function move(var, dir)
-	speed = 0.002;
+	speed = 0.01;
 	if (dir == "up") then
 		return var+(speed*(1280/768));
 	end
@@ -15,19 +15,7 @@ function move(var, dir)
 end
 
 function intersects(NWX1, NWY1, SEX1, SEY1, NWX2, NWY2, SEX2, SEY2)
-	--[[
-	rect1 = {};
-	rect1["x1"]= NWX1;
-	rect1["y1"] = NWY1;
-	rect1["x2"] = SEX1;
-	rect1["y2"] = SEY1;
-	rect2 = {};
-	rect2["x1"] = NWX2;
-	rect2["y1"] = NWY2;
-	rect2["x2"] = SEX2;
-	rect2["y2"] = SEY2;
-	]]--
-	if (SEY1 > NWY2) then
+	if (SEY1 < NWY2) then
 		return false; --ouside top
 	end
 	if (SEX1 < NWX2) then
@@ -36,7 +24,7 @@ function intersects(NWX1, NWY1, SEX1, SEY1, NWX2, NWY2, SEX2, SEY2)
 	if (NWX1 > SEX2) then
 		return false; --outside right
 	end
-	if (NWY1 < SEY2) then
+	if (NWY1 > SEY2) then
 		return false; --outside bottom
 	end
 	return true;
