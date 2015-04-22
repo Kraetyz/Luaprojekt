@@ -23,7 +23,7 @@ protected:
 	void setColor(vec3 col);
 public:
 	GameObject();
-	GameObject(vec2 pos, vec3 rgb);
+	GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY);
 	void getCorners(vec2 toFill[]);
 	vec3 getColor();
 	void moveX(float newX, int index);
