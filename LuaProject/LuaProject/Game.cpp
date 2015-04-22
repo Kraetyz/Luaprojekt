@@ -21,14 +21,13 @@ Game::Game()
 
 	if (luaL_loadfile(map, "map.txt") || lua_pcall(map, 0, 0, 0))
 		throw;
-
-	player = new GameObject(getPositionOfObject(-1), glm::vec3(1, 0, 0), 0.8, 0.8);
+	createPlayer();
 	lua_getglobal(map, "NUMBEROFOBJECTS");
 	nrOfObjects = lua_tointeger(map, -1);
 	lua_pop(map, 1);
 	allObjects = new GameObject*[nrOfObjects];
-	for (int c=0; c<nrOfObjects; c++)
-		allObjects[c] = new GameObject(getPositionOfObject(c), glm::vec3(0, 1, 0), 1, 1);
+	for (int c = 0; c < nrOfObjects; c++)
+		createObject(c);
 }
 
 Game::~Game()
@@ -51,11 +50,11 @@ Game::~Game()
 	lua_close(map);
 }
 
-vec2 Game::getPositionOfObject(int index)
+void Game::createPlayer()
 {
 	vec2 ret;
 	lua_getglobal(map, "getObject");
-	lua_pushinteger(map, index);
+	lua_pushinteger(map, -1);
 	int error = lua_pcall(map, 1, 2, 0);
 	if (error)
 		throw;
@@ -63,7 +62,40 @@ vec2 Game::getPositionOfObject(int index)
 	lua_pop(map, 1);
 	ret.x = lua_tonumber(map, -1);
 	lua_pop(map, 1);
-	return ret;
+
+	player = new GameObject(ret, glm::vec3(1, 0, 0), 0.8, 0.8);
+}
+
+void Game::createObject(int index)
+{
+	vec2 scale;
+	vec2 pos;
+	vec3 col = vec3(0.5, 0.5, 0.5);
+	lua_getglobal(map, "getObject");
+	lua_pushinteger(map, index);
+	int error = lua_pcall(map, 1, 5, 0);
+	if (error)
+		throw;
+	scale.y = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+	scale.x = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+	std::string color = lua_tostring(map, -1);
+	if (color == "red")
+		col = vec3(1, 0, 0);
+	if (color == "green")
+		col = vec3(0, 1, 0);
+	if (color == "blue")
+		col = vec3(0, 0, 1);
+	if (color == "white")
+		col = vec3(1, 1, 1);
+	lua_pop(map, 1);
+	pos.y = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+	pos.x = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+
+	allObjects[index] = new GameObject(pos, col, scale.x, scale.y);
 }
 
 void Game::Render()
@@ -94,12 +126,12 @@ int Game::update()
 			throw;
 		if (luaL_loadfile(map, "map.txt") || lua_pcall(map, 0, 0, 0))
 			throw;
+		delete player;
+		createPlayer();
 		for (int c = 0; c < nrOfObjects; c++)
 		{
-			delete player;
-			player = new GameObject(getPositionOfObject(-1), glm::vec3(1, 0, 0), 0.8, 0.8);
 			delete allObjects[c];
-			allObjects[c] = new GameObject(getPositionOfObject(c), glm::vec3(0, 1, 0), 0.8, 0.8);
+			createObject(c);
 		}
 	}
 	
