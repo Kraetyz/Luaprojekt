@@ -110,6 +110,7 @@
     <ClInclude Include="ShaderHolder.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="map.txt" />
     <Text Include="testscript.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

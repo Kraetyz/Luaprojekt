@@ -45,3 +45,12 @@ Spelprojekt/Spelprojekt/Debug/Spelprojekt.log
 *.log
 *.lastbuildstate
 *.idb
+LuaProject/Debug/LuaProject.ilk
+*.ilk
+*.ilk
+LuaProject/Debug/LuaProject.pdb
+*.suo
+LuaProject/LuaProject/Debug/LuaProject.log
+*.tlog
+LuaProject/LuaProject/Debug/LuaProject.tlog/LuaProject.lastbuildstate
+*.idb

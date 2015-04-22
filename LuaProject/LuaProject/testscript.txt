@@ -1,16 +1,17 @@
+playerSpeed = 0.005;
+
 function move(var, dir)
-	speed = 0.01;
 	if (dir == "up") then
-		return var+(speed*(1280/768));
+		return var+(playerSpeed*(1280/768));
 	end
 	if (dir == "down") then
-		return var-(speed*(1280/768));
+		return var-(playerSpeed*(1280/768));
 	end
 	if (dir == "left") then
-		return var-speed;
+		return var-playerSpeed;
 	end
 	if (dir == "right") then
-		return var+speed;
+		return var+playerSpeed;
 	end
 end
 

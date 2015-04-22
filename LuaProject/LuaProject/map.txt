@@ -1,0 +1,16 @@
+--Player start position
+playerX = 0; playerY = 0;
+
+--All map objects listed
+mapsX = {};
+mapsY = {};
+
+NUMBEROFOBJECTS = 1;
+mapsX[1] = 0.0; mapsY[1] = 0.5;
+
+function getObject(index)
+	if (index < NUMBEROFOBJECTS) then
+		return mapsX[index+1], mapsY[index+1];
+	end
+	return -2,-2;
+end
