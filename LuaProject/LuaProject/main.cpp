@@ -51,7 +51,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		ShowWindow(wndHandle, nCmdShow);
 
 		game = new Game();
-		glClearColor(0.3f, 0.3f, 1, 1);
 		while (WM_QUIT != msg.message)
 		{
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))

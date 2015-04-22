@@ -3,6 +3,8 @@ playerX = 0; playerY = 0;
 
 --Map's sight radius
 RADIUS = 0.2;
+--Map's background color
+BACKR = 0.1; BACKG = 0.2; BACKB = 0.3;
 
 --All map objects listed
 mapsX = {};

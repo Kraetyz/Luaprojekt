@@ -22,6 +22,7 @@ ShaderHolder::ShaderHolder()
 
 		uniform vec2 playerPos;
 		uniform float radius;
+		uniform vec3 backColor;
 
 		void main ()
 		{
@@ -34,7 +35,7 @@ ShaderHolder::ShaderHolder()
 			}
 			else
 			{
-				fragment_color = vec4(0.3, 0.3, 1, 1);
+				fragment_color = vec4(backColor, 1);
 			}
 		}
 	)";

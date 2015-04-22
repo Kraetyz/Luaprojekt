@@ -12,6 +12,7 @@ private:
 	vec2 playerCorners[4];
 	vec2 playerPos = vec2(0, 0);
 	float radius;
+	vec3 backColor;
 public:
 	Renderer();
 	~Renderer();
@@ -20,6 +21,7 @@ public:
 	void setProgram();
 	void setBtnProgram();
 	void setRadius(float r);
+	void setClearColor(float r, float g, float b);
 };
 
 #endif

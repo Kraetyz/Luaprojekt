@@ -30,9 +30,17 @@ Game::Game()
 		createObject(c);
 
 	lua_getglobal(map, "RADIUS");
-	float r = lua_tonumber(map, -1);
-	renderer->setRadius(r);
+	float rad = lua_tonumber(map, -1);
+	renderer->setRadius(rad);
 	lua_pop(map, 1);
+	lua_getglobal(map, "BACKR");
+	float r = lua_tonumber(map, -1);
+	lua_getglobal(map, "BACKG");
+	float g = lua_tonumber(map, -1);
+	lua_getglobal(map, "BACKB");
+	float b = lua_tonumber(map, -1);
+	lua_pop(map, 3);
+	renderer->setClearColor(r, g, b);
 }
 
 Game::~Game()
@@ -140,7 +148,14 @@ int Game::update()
 		}
 		lua_getglobal(map, "RADIUS");
 		renderer->setRadius(lua_tonumber(map, -1));
-		lua_pop(map, 1);
+		lua_getglobal(map, "BACKR");
+		float r = lua_tonumber(map, -1);
+		lua_getglobal(map, "BACKG");
+		float g = lua_tonumber(map, -1);
+		lua_getglobal(map, "BACKB");
+		float b = lua_tonumber(map, -1);
+		lua_pop(map, 3);
+		renderer->setClearColor(r, g, b);
 	}
 	
 	float oldX, oldY;

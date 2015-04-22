@@ -47,6 +47,8 @@ void Renderer::Render(GameObject* toRender, GameObject* player)
 	GLuint prog = shader->getProgram();
 	GLuint pos = glGetUniformLocation(prog, "radius");
 	glUniform1f(pos, radius);
+	pos = glGetUniformLocation(prog, "backColor");
+	glUniform3fv(pos, 1, &backColor[0]);
 	if (player)
 	{
 		player->getCorners(playerCorners);
@@ -98,4 +100,10 @@ void Renderer::setBtnProgram()
 void Renderer::setRadius(float r)
 {
 	radius = r;
+}
+
+void Renderer::setClearColor(float r, float g, float b)
+{
+	backColor = vec3(r, g, b);
+	glClearColor(r, g, b, 1);
 }
