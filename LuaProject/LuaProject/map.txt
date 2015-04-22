@@ -18,7 +18,7 @@ mapsX[6] = 8; mapsY[6] = 3; mapsC[6] = "red"; mapsScaleX[6] = 1; mapsScaleY[6] =
 mapsX[7] = 9; mapsY[7] = 3; mapsC[7] = "blue"; mapsScaleX[7] = 1; mapsScaleY[7] = 1;
 mapsX[8] = 10; mapsY[8] = 2; mapsC[8] = "blue"; mapsScaleX[8] = 3; mapsScaleY[8] = 1;
 mapsX[9] = 9; mapsY[9] = 1; mapsC[9] = "white"; mapsScaleX[9] = 1; mapsScaleY[9] = 1;
-mapsX[10] = 1; mapsY[10] = 2; mapsC[10] = "white"; mapsScaleX[10] = 4; mapsScaleY[10] = 1;
+mapsX[10] = 1; mapsY[10] = 2; mapsC[10] = "white"; mapsScaleX[10] = 2; mapsScaleY[10] = 1;
 
 function getObject(index)
 	if (index == -1) then
