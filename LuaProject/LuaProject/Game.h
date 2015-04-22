@@ -5,10 +5,11 @@
 #include "Lua/lauxlib.h"
 #include "Lua/lualib.h"
 
+#include "State.h"
 #include "Renderer.h"
 #include "GameObject.h"
 
-class Game
+class Game : public State
 {
 private:
 	GameObject* player;
@@ -28,7 +29,7 @@ public:
 	Game();
 	~Game();
 	void Render();
-	int update();
+	string update();
 };
 
 #endif

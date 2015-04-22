@@ -113,6 +113,7 @@ void Game::createObject(int index)
 
 void Game::Render()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	renderer->setProgram();
 	renderer->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)
@@ -126,7 +127,7 @@ void Game::Render()
 	}
 }
 
-int Game::update()
+string Game::update()
 {
 	int error = 0;
 	vec2 corners[4];
@@ -240,7 +241,7 @@ int Game::update()
 		}
 	}
 
-	return 0;
+	return "";
 }
 
 bool Game::collide(vec2 playerCorners[])

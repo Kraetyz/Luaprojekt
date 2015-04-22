@@ -94,6 +94,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderHolder.cpp" />
   </ItemGroup>
@@ -106,8 +107,10 @@
     <ClInclude Include="Lua\lua.hpp" />
     <ClInclude Include="Lua\luaconf.h" />
     <ClInclude Include="Lua\lualib.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderHolder.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="map.txt" />

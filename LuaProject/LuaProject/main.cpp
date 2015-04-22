@@ -12,6 +12,7 @@
 #pragma comment(lib, "glew32.lib")
 
 #include "Game.h"
+#include "Menu.h"
 
 HWND InitWindow(HINSTANCE hInstance);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -24,13 +25,20 @@ void SetViewport()
 	glViewport(0, 0, 1280, 768);
 }
 
-Game* game;
+State* game;
 
 void Update()
 {
-	int msg = game->update();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	game->Render();
+	string msg = game->update();
+	if (msg == "StartGame")
+	{
+		delete game;
+		game = new Game();
+	}
+	else
+	{
+		game->Render();
+	}
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -50,7 +58,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		ShowWindow(wndHandle, nCmdShow);
 
-		game = new Game();
+		game = new Menu();
 		while (WM_QUIT != msg.message)
 		{
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
