@@ -54,3 +54,5 @@ LuaProject/LuaProject/Debug/LuaProject.log
 *.tlog
 LuaProject/LuaProject/Debug/LuaProject.tlog/LuaProject.lastbuildstate
 *.idb
+*.sdf
+*.suo
