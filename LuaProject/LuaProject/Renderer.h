@@ -11,6 +11,7 @@ private:
 	GLuint buf;
 	vec2 playerCorners[4];
 	vec2 playerPos = vec2(0, 0);
+	float radius;
 public:
 	Renderer();
 	~Renderer();
@@ -18,6 +19,7 @@ public:
 	void Render(GameObject* toRender, GameObject* player = 0);
 	void setProgram();
 	void setBtnProgram();
+	void setRadius(float r);
 };
 
 #endif

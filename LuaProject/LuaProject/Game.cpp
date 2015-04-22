@@ -28,6 +28,11 @@ Game::Game()
 	allObjects = new GameObject*[nrOfObjects];
 	for (int c = 0; c < nrOfObjects; c++)
 		createObject(c);
+
+	lua_getglobal(map, "RADIUS");
+	float r = lua_tonumber(map, -1);
+	renderer->setRadius(r);
+	lua_pop(map, 1);
 }
 
 Game::~Game()
@@ -133,6 +138,9 @@ int Game::update()
 			delete allObjects[c];
 			createObject(c);
 		}
+		lua_getglobal(map, "RADIUS");
+		renderer->setRadius(lua_tonumber(map, -1));
+		lua_pop(map, 1);
 	}
 	
 	float oldX, oldY;

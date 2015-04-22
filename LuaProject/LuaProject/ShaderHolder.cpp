@@ -21,19 +21,20 @@ ShaderHolder::ShaderHolder()
 		in vec2 position;
 
 		uniform vec2 playerPos;
+		uniform float radius;
 
 		void main ()
 		{
 			float ratio = 1280.0/768.0;
 			vec2 dist = playerPos - position;
 			dist.y = dist.y/ratio;
-			if (length(dist) < 0.2)
+			if (length(dist) < radius)
 			{
 				fragment_color = vec4(color, 1.0);
 			}
 			else
 			{
-				fragment_color = vec4(0, 0, 0, 1);
+				fragment_color = vec4(0.3, 0.3, 1, 1);
 			}
 		}
 	)";
