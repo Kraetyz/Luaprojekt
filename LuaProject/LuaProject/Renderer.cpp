@@ -54,9 +54,10 @@ void Renderer::Render(GameObject* toRender, GameObject* player)
 		playerPos.x = playerPos.x / 4;
 		playerPos.y = playerCorners[0].y + playerCorners[1].y + playerCorners[2].y + playerCorners[3].y;
 		playerPos.y = playerPos.y / 4;
-	}
-	GLuint playerPosID = glGetUniformLocation(prog, "playerPos");
-	glUniform2fv(playerPosID, 1, &playerPos[0]);
+		
+		GLuint playerPosID = glGetUniformLocation(prog, "playerPos");
+		glUniform2fv(playerPosID, 1, &playerPos[0]);
+	}	
 
 	vec2 corners[4];
 	toRender->getCorners(corners);
