@@ -1,6 +1,9 @@
 --Player start position
 playerX = 0; playerY = 0;
 
+--Map's sight radius
+RADIUS = 0.2;
+
 --All map objects listed
 mapsX = {};
 mapsY = {};

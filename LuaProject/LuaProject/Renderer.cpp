@@ -4,6 +4,7 @@ Renderer::Renderer()
 {
 	shader = new ShaderHolder();
 	playerCorners[0] = playerCorners[1] = playerCorners[2] = playerCorners[3] = vec2(0, 0);
+	radius = 1.0f;
 }
 
 Renderer::~Renderer()
@@ -43,6 +44,9 @@ void Renderer::Render(Button* toRender)
 
 void Renderer::Render(GameObject* toRender, GameObject* player)
 {
+	GLuint prog = shader->getProgram();
+	GLuint pos = glGetUniformLocation(prog, "radius");
+	glUniform1f(pos, radius);
 	if (player)
 	{
 		player->getCorners(playerCorners);
@@ -51,7 +55,6 @@ void Renderer::Render(GameObject* toRender, GameObject* player)
 		playerPos.y = playerCorners[0].y + playerCorners[1].y + playerCorners[2].y + playerCorners[3].y;
 		playerPos.y = playerPos.y / 4;
 	}
-	GLuint prog = shader->getProgram();
 	GLuint playerPosID = glGetUniformLocation(prog, "playerPos");
 	glUniform2fv(playerPosID, 1, &playerPos[0]);
 
@@ -89,4 +92,9 @@ void Renderer::setProgram()
 void Renderer::setBtnProgram()
 {
 	glUseProgram(shader->getButtonProgram());
+}
+
+void Renderer::setRadius(float r)
+{
+	radius = r;
 }
