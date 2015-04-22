@@ -34,7 +34,7 @@ ShaderHolder::ShaderHolder()
 			}
 			else
 			{
-				fragment_color = vec4(0, 0, 0, 1);
+				fragment_color = vec4(0.3, 0.3, 1, 1);
 			}
 		}
 	)";

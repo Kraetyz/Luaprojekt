@@ -30,7 +30,6 @@ void Update()
 {
 	int msg = game->update();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0, 0, 0, 1);
 	game->Render();
 }
 
@@ -46,16 +45,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		glewInit(); //3. Initiera The OpenGL Extension Wrangler Library (GLEW)
 		//glEnable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(GL_TRUE);
-		glDepthFunc(GL_LEQUAL);
 
 		SetViewport(); //4. Sätt viewport
 
 		ShowWindow(wndHandle, nCmdShow);
 
 		game = new Game();
-
+		glClearColor(0.3f, 0.3f, 1, 1);
 		while (WM_QUIT != msg.message)
 		{
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
