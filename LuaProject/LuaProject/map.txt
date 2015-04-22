@@ -5,12 +5,35 @@ playerX = 0; playerY = 0;
 mapsX = {};
 mapsY = {};
 
-NUMBEROFOBJECTS = 1;
+NUMBEROFOBJECTS = 10;
+--[[
 mapsX[1] = 0.0; mapsY[1] = 0.5;
+mapsX[2] = 0.1; mapsY[2] = 0.5;
+mapsX[3] = 0.2; mapsY[3] = 0.5;
+mapsX[4] = 0.3; mapsY[4] = 0.5;
+mapsX[5] = 0.4; mapsY[5] = 0.5;
+mapsX[6] = 0.5; mapsY[6] = 0.5;
+mapsX[7] = 0.6; mapsY[7] = 0.5;
+mapsX[8] = 0.7; mapsY[8] = 0.5;
+mapsX[9] = 0.8; mapsY[9] = 0.5;
+]]--
+mapsX[1] = -2; mapsY[1] = 3;
+mapsX[2] = 0; mapsY[2] = 3;
+mapsX[3] = 2; mapsY[3] = 3;
+mapsX[4] = 4; mapsY[4] = 3;
+mapsX[5] = 6; mapsY[5] = 3;
+mapsX[6] = 8; mapsY[6] = 3;
+mapsX[7] = 9; mapsY[7] = 3;
+mapsX[8] = 9; mapsY[8] = 2;
+mapsX[9] = 9; mapsY[9] = 1;
+mapsX[10] = 1; mapsY[10] = 4;
 
 function getObject(index)
+	if (index == -1) then
+		return playerX, playerY;
+	end
 	if (index < NUMBEROFOBJECTS) then
 		return mapsX[index+1], mapsY[index+1];
 	end
-	return -2,-2;
+	return -100,-100;
 end

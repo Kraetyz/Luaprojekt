@@ -20,7 +20,7 @@ private:
 	lua_State* scripts = 0;
 	lua_State* map = 0;
 
-	bool collide(vec2 corners[], vec2 enemy[]);
+	bool collide(vec2 playerCorners[]);
 
 	vec2 getPositionOfObject(int index);
 public:
