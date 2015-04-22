@@ -6,8 +6,8 @@ Game::Game()
 	nrOfButtons = 1;
 	allButtons = new Button*[nrOfButtons];
 	//nrOfButtons = 0; //THUGLÖSNING för att jag inte har några knappar än
-	allButtons[0] = new Button(vec2(-15, -8), "Hitlerknapp");
-	allButtons[0]->loadBMP("HEIL.bmp");
+	allButtons[0] = new Button(vec2(-15, -8), "Hejsanknapp");
+	allButtons[0]->loadBMP("Hej.bmp");
 
 	renderer = new Renderer();
 	scripts = luaL_newstate();
