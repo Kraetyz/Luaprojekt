@@ -3,6 +3,7 @@
 Renderer::Renderer()
 {
 	shader = new ShaderHolder();
+	playerCorners[0] = playerCorners[1] = playerCorners[2] = playerCorners[3] = vec2(0, 0);
 }
 
 Renderer::~Renderer()
@@ -40,8 +41,20 @@ void Renderer::Render(Button* toRender)
 	glDeleteVertexArrays(1, &vao);
 }
 
-void Renderer::Render(GameObject* toRender)
+void Renderer::Render(GameObject* toRender, GameObject* player)
 {
+	if (player)
+	{
+		player->getCorners(playerCorners);
+		playerPos.x = playerCorners[0].x + playerCorners[1].x + playerCorners[2].x + playerCorners[3].x;
+		playerPos.x = playerPos.x / 4;
+		playerPos.y = playerCorners[0].y + playerCorners[1].y + playerCorners[2].y + playerCorners[3].y;
+		playerPos.y = playerPos.y / 4;
+	}
+	GLuint prog = shader->getProgram();
+	GLuint playerPosID = glGetUniformLocation(prog, "playerPos");
+	glUniform2fv(playerPosID, 1, &playerPos[0]);
+
 	vec2 corners[4];
 	toRender->getCorners(corners);
 	vec3 color = toRender->getColor();
@@ -56,7 +69,7 @@ void Renderer::Render(GameObject* toRender)
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(0); //the vertex attribute object will remember its enabled attributes
-	GLuint prog = shader->getProgram();
+	
 	GLuint vertexPos = glGetAttribLocation(prog, "vertex_position");
 	glVertexAttribPointer(vertexPos, 2, GL_FLOAT, GL_FALSE, sizeof(float)*2, (void*)0);
 

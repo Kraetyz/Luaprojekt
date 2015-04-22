@@ -5,10 +5,12 @@ ShaderHolder::ShaderHolder()
 	const char* vertex_shader = R"(
 		#version 400
 		layout(location = 0) in vec2 vertex_position;
-		
+		out vec2 position;
+
 		void main ()
 		{
 			gl_Position = vec4(vertex_position, 1.0, 1.0);
+			position = vec2(gl_Position.x, gl_Position.y);
 		}
 	)";
 
@@ -16,10 +18,23 @@ ShaderHolder::ShaderHolder()
 		#version 400
 		out vec4 fragment_color;
 		uniform vec3 color;
+		in vec2 position;
+
+		uniform vec2 playerPos;
 
 		void main ()
 		{
-			fragment_color = vec4(color, 1.0);
+			float ratio = 1280.0/768.0;
+			vec2 dist = playerPos - position;
+			dist.y = dist.y/ratio;
+			if (length(dist) < 0.2)
+			{
+				fragment_color = vec4(color, 1.0);
+			}
+			else
+			{
+				fragment_color = vec4(0, 0, 0, 1);
+			}
 		}
 	)";
 	//create vertex shader

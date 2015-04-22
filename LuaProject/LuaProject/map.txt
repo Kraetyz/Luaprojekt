@@ -5,8 +5,27 @@ playerX = 0; playerY = 0;
 mapsX = {};
 mapsY = {};
 
-NUMBEROFOBJECTS = 1;
-mapsX[1] = 0.0; mapsY[1] = 0.5;
+NUMBEROFOBJECTS = 20;
+mapsX[1] = 0.1; mapsY[1] = 0.5;
+mapsX[2] = 0.2; mapsY[2] = 0.2;
+mapsX[3] = 0.3; mapsY[3] = 0.0;
+mapsX[4] = 0.4; mapsY[4] = 0.0;
+mapsX[5] = 0.5; mapsY[5] = -0.5;
+mapsX[6] = 0.6; mapsY[6] = 0.5;
+mapsX[7] = 0.7; mapsY[7] = 0.5;
+mapsX[8] = 0.8; mapsY[8] = -0.5;
+mapsX[9] = 0.9; mapsY[9] = -0.5;
+mapsX[10] = -0.1; mapsY[10] = 0.8;
+mapsX[11] = -0.2; mapsY[11] = 0.8;
+mapsX[12] = -0.3; mapsY[12] = -0.8;
+mapsX[13] = -0.4; mapsY[13] = -0.8;
+mapsX[14] = -0.5; mapsY[14] = 0.0;
+mapsX[15] = -0.6; mapsY[15] = 0.5;
+mapsX[16] = -0.7; mapsY[16] = 0.0;
+mapsX[17] = -0.8; mapsY[17] = 0.5;
+mapsX[18] = -0.9; mapsY[18] = 0.0;
+mapsX[19] = 0.0; mapsY[19] = 0.5;
+mapsX[20] = 0.0; mapsY[20] = 0.2;
 
 function getObject(index)
 	if (index < NUMBEROFOBJECTS) then

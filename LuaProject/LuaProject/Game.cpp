@@ -72,7 +72,7 @@ vec2 Game::getPositionOfObject(int index)
 void Game::Render()
 {
 	renderer->setProgram();
-	renderer->Render(player);
+	renderer->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)
 	{
 		renderer->Render(allObjects[c]);
