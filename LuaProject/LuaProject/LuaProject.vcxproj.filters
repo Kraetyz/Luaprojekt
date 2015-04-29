@@ -82,13 +82,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="testscript.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="map.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="menuButtons.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="testscript.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

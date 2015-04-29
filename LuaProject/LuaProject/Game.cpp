@@ -14,11 +14,18 @@ Game::Game()
 	lua_getglobal(L, "ErrorHandler");
 	luaErrorHandlerPos = lua_gettop(L);
 
-	map = luaL_newstate();
-	luaL_openlibs(map); /* opens the standard libraries */
+	if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+	{
+		std::cout << "erroooor" << std::endl;
+		std::cout << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
 
-	if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, 0))
-		throw;
+	if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+	{
+		std::cerr << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
 	createPlayer();
 	createGoal();
 	lua_getglobal(L, "NUMBEROFOBJECTS");
@@ -30,7 +37,7 @@ Game::Game()
 
 	lua_getglobal(L, "RADIUS");
 	float rad = lua_tonumber(L, -1);
-	renderer->setRadius(rad);
+	render->setRadius(rad);
 	lua_pop(L, 1);
 	lua_getglobal(L, "BACKR");
 	float r = lua_tonumber(L, -1);
@@ -39,116 +46,132 @@ Game::Game()
 	lua_getglobal(L, "BACKB");
 	float b = lua_tonumber(L, -1);
 	lua_pop(L, 3);
-	renderer->setClearColor(r, g, b);
+	render->setClearColor(r, g, b);
+	lua_pop(L, 1);
 }
 
 Game::~Game()
 {
 	delete player;
-	delete renderer;
 	for (int c = 0; c < nrOfObjects; c++)
 	{
 		delete allObjects[c];
 	}
 	delete[]allObjects;
 
-	for (int c = 0; c < nrOfButtons; c++)
-	{
-		delete allButtons[c];
-	}
-	delete[]allButtons;
+	
 
-	lua_close(scripts);
-	lua_close(map);
+	lua_close(L);
 }
 
 void Game::createPlayer()
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	vec2 ret;
 	lua_getglobal(L, "getObject");
 	lua_pushinteger(L, -1);
-	int error = lua_pcall(L, 1, 2, 0);
+	int error = lua_pcall(L, 1, 2, luaErrorHandlerPos);
 	if (error)
-		throw;
-	ret.y = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	ret.x = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-
+	{
+		std::cout << " ERROR: " << std::endl;
+		std::cout << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
+	else
+	{
+		ret.y = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+		ret.x = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+	}
 	player = new GameObject(ret, glm::vec3(1, 0, 0), 0.8, 0.8);
+	lua_pop(L, 1);
 }
 
 void Game::createGoal()
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	vec2 ret;
 	lua_getglobal(L, "getObject");
 	lua_pushinteger(L, -2);
-	int error = lua_pcall(L, 1, 2, 0);
+	int error = lua_pcall(L, 1, 2, luaErrorHandlerPos);
 	if (error)
-		throw;
+	{
+		std::cout << " ERROR: " << std::endl;
+		std::cout << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
 	ret.y = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 	ret.x = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 
 	goal = new GameObject(ret, glm::vec3(1, 0, 0), 0.4, 0.4);
+	lua_pop(L, 1);
 }
 
 void Game::createObject(int index)
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	vec2 scale;
 	vec2 pos;
 	vec3 col = vec3(0.5, 0.5, 0.5);
 	lua_getglobal(L, "getObject");
 	lua_pushinteger(L, index);
-	int error = lua_pcall(L, 1, 5, 0);
+	int error = lua_pcall(L, 1, 5, luaErrorHandlerPos);
 	if (error)
-		throw;
-	scale.y = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	scale.x = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	std::string color = lua_tostring(L, -1);
-	if (color == "red")
-		col = vec3(1, 0, 0);
-	if (color == "green")
-		col = vec3(0, 1, 0);
-	if (color == "blue")
-		col = vec3(0, 0, 1);
-	if (color == "white")
-		col = vec3(1, 1, 1);
-	lua_pop(L, 1);
-	pos.y = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	pos.x = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-
+	{
+		std::cout << " ERROR: " << std::endl;
+		std::cout << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
+	else
+	{
+		scale.y = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+		scale.x = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+		std::string color = lua_tostring(L, -1);
+		if (color == "red")
+			col = vec3(1, 0, 0);
+		if (color == "green")
+			col = vec3(0, 1, 0);
+		if (color == "blue")
+			col = vec3(0, 0, 1);
+		if (color == "white")
+			col = vec3(1, 1, 1);
+		lua_pop(L, 1);
+		pos.y = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+		pos.x = lua_tonumber(L, -1);
+		lua_pop(L, 1);
+	}
 	allObjects[index] = new GameObject(pos, col, scale.x, scale.y);
+	lua_pop(L, 1);
 }
 
 void Game::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderer->setProgram();
-	renderer->Render(player, player);
+	render->setProgram();
+	render->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)
 	{
-		renderer->Render(allObjects[c]);
+		render->Render(allObjects[c]);
 	}
 
-	renderer->Render(goal);
-
-	renderer->setBtnProgram();
-	for (int c = 0; c < nrOfButtons; c++)
-	{
-		renderer->Render(allButtons[c]);
-	}
+	render->Render(goal);
 
 	
 }
 
 string Game::update()
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	int error = 0;
 	vec2 corners[4];
 	player->getCorners(corners);
@@ -156,21 +179,27 @@ string Game::update()
 
 	if (GetKeyState('R') && GetAsyncKeyState('R'))
 	{
-		if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, 0))
-			throw;
-		if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, 0))
-			throw;
+		if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+		{
+			std::cout << " ERROR: " << std::endl;
+			std::cout << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+		if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+		{
+			std::cout << " ERROR: " << std::endl;
+			std::cout << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
 		delete player;
 		createPlayer();
-		delete goal;
-		createGoal();
 		for (int c = 0; c < nrOfObjects; c++)
 		{
 			delete allObjects[c];
 			createObject(c);
 		}
 		lua_getglobal(L, "RADIUS");
-		renderer->setRadius(lua_tonumber(L, -1));
+		render->setRadius(lua_tonumber(L, -1));
 		lua_getglobal(L, "BACKR");
 		float r = lua_tonumber(L, -1);
 		lua_getglobal(L, "BACKG");
@@ -178,9 +207,9 @@ string Game::update()
 		lua_getglobal(L, "BACKB");
 		float b = lua_tonumber(L, -1);
 		lua_pop(L, 3);
-		renderer->setClearColor(r, g, b);
+		render->setClearColor(r, g, b);
 	}
-	
+
 	float oldX, oldY;
 	float newX, newY;
 	if (GetKeyState('A') && GetAsyncKeyState('A'))
@@ -190,12 +219,19 @@ string Game::update()
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].x);
 			lua_pushstring(L, "left");
-			error = lua_pcall(L, 2, 1, 0);
+			error = lua_pcall(L, 2, 1, luaErrorHandlerPos);
 			if (error)
-				throw;
-			newX = lua_tonumber(L, -1);
-			lua_pop(L, 1);
-			player->moveX(newX, c);
+			{
+				std::cout << " ERROR: " << std::endl;
+				std::cout << lua_tostring(L, -1) << std::endl;
+				lua_pop(L, 1);
+			}
+			else
+			{
+				newX = lua_tonumber(L, -1);
+				lua_pop(L, 1);
+				player->moveX(newX, c);
+			}
 		}
 	}
 	if (GetKeyState('D') && GetAsyncKeyState('D'))
@@ -205,12 +241,19 @@ string Game::update()
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].x);
 			lua_pushstring(L, "right");
-			error = lua_pcall(L, 2, 1, 0);
+			error = lua_pcall(L, 2, 1, luaErrorHandlerPos);
 			if (error)
-				throw;
-			newX = lua_tonumber(L, -1);
-			lua_pop(L, 1);
-			player->moveX(newX, c);
+			{
+				std::cout << " ERROR: " << std::endl;
+				std::cout << lua_tostring(L, -1) << std::endl;
+				lua_pop(L, 1);
+			}
+			else
+			{
+				newX = lua_tonumber(L, -1);
+				lua_pop(L, 1);
+				player->moveX(newX, c);
+			}
 		}
 	}
 
@@ -230,12 +273,19 @@ string Game::update()
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "up");
-			error = lua_pcall(L, 2, 1, 0);
+			error = lua_pcall(L, 2, 1, luaErrorHandlerPos);
 			if (error)
-				throw;
-			newY = lua_tonumber(L, -1);
-			lua_pop(L, 1);
-			player->moveY(newY, c);
+			{
+				std::cout << " ERROR: " << std::endl;
+				std::cout << lua_tostring(L, -1) << std::endl;
+				lua_pop(L, 1);
+			}
+			else
+			{
+				newY = lua_tonumber(L, -1);
+				lua_pop(L, 1);
+				player->moveY(newY, c);
+			}
 		}
 	}
 	if (GetKeyState('S') && GetAsyncKeyState('S'))
@@ -245,16 +295,34 @@ string Game::update()
 			lua_getglobal(L, "move");
 			lua_pushnumber(L, corners[c].y);
 			lua_pushstring(L, "down");
-			error = lua_pcall(L, 2, 1, 0);
+			error = lua_pcall(L, 2, 1, luaErrorHandlerPos);
 			if (error)
-				throw;
-			newY = lua_tonumber(L, -1);
-			lua_pop(L, 1);
-			player->moveY(newY, c);
+			{
+				std::cout << " ERROR: " << std::endl;
+				std::cout << lua_tostring(L, -1) << std::endl;
+				lua_pop(L, 1);
+			}
+			else
+			{
+				newY = lua_tonumber(L, -1);
+				lua_pop(L, 1);
+				player->moveY(newY, c);
+			}
 		}
 	}
 
 	player->getCorners(corners);
+	if (collide(corners))
+	{
+		for (int c = 0; c < 4; c++)
+		{
+			player->moveY(tempCorners[c].y, c);
+		}
+	}
+	lua_pop(L, 1);
+
+	player->getCorners(corners);
+
 	if (goalCollide(corners))
 	{
 		for (int c = 0; c < 4; c++)
@@ -279,6 +347,8 @@ string Game::update()
 
 bool Game::collide(vec2 playerCorners[])
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	bool hit = false;
 	vec2 map[4];
 	float cNWx = playerCorners[NW].x;
@@ -302,17 +372,26 @@ bool Game::collide(vec2 playerCorners[])
 		lua_pushnumber(L, eNWy);
 		lua_pushnumber(L, eSEx);
 		lua_pushnumber(L, eSEy);
-		int error = lua_pcall(L, 8, 1, 0);
-		if (error)
-			throw;
-		hit = lua_toboolean(L, -1);
-		lua_pop(L, 1);
-	}	
+		if (lua_pcall(L, 8, 1, luaErrorHandlerPos))
+		{
+			std::cout << " ERROR: " << std::endl;
+			std::cout << lua_tostring(L, -1) << std::endl;
+			lua_pop(L, 1);
+		}
+		else
+		{
+			hit = lua_toboolean(L, -1);
+			lua_pop(L, 1);
+		}
+	}
+	lua_pop(L, 1);
 	return hit;
 }
 
 bool Game::goalCollide(vec2 playerCorners[])
 {
+	lua_getglobal(L, "ErrorHandler");
+	luaErrorHandlerPos = lua_gettop(L);
 	bool hit = false;
 	vec2 map[4];
 	goal->getCorners(map);
@@ -334,10 +413,18 @@ bool Game::goalCollide(vec2 playerCorners[])
 	lua_pushnumber(L, eSEx);
 	lua_pushnumber(L, eSEy);
 
-	int error = lua_pcall(L, 8, 1, 0);
+	int error = lua_pcall(L, 8, 1, luaErrorHandlerPos);
 	if (error)
-		throw;
-	hit = lua_toboolean(L, -1);
+	{
+		std::cout << " ERROR: " << std::endl;
+		std::cout << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+	}
+	else
+	{
+		hit = lua_toboolean(L, -1);
+		lua_pop(L, 1);
+	}
 	lua_pop(L, 1);
 
 	return hit;
