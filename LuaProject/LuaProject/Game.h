@@ -12,6 +12,7 @@
 class Game : public State
 {
 private:
+	GameObject* goal;
 	GameObject* player;
 	GameObject** allObjects;
 	int nrOfObjects;
@@ -22,7 +23,10 @@ private:
 	lua_State* map = 0;
 
 	bool collide(vec2 playerCorners[]);
+	bool goalCollide(vec2 playerCorners[]);
 
+	void goalUpdate();
+	void createGoal();
 	void createPlayer();
 	void createObject(int index);
 public:

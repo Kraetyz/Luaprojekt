@@ -8,7 +8,7 @@ Game::Game()
 	//nrOfButtons = 0; //THUGLÖSNING för att jag inte har några knappar än
 	allButtons[0] = new Button(vec2(-15, -8), "Hejsanknapp");
 	allButtons[0]->loadBMP("Hej.bmp");
-
+	
 	renderer = new Renderer();
 	scripts = luaL_newstate();
 	luaL_openlibs(scripts); /* opens the standard libraries */
@@ -22,6 +22,7 @@ Game::Game()
 	if (luaL_loadfile(map, "map.txt") || lua_pcall(map, 0, 0, 0))
 		throw;
 	createPlayer();
+	createGoal();
 	lua_getglobal(map, "NUMBEROFOBJECTS");
 	nrOfObjects = lua_tointeger(map, -1);
 	lua_pop(map, 1);
@@ -79,6 +80,22 @@ void Game::createPlayer()
 	player = new GameObject(ret, glm::vec3(1, 0, 0), 0.8, 0.8);
 }
 
+void Game::createGoal()
+{
+	vec2 ret;
+	lua_getglobal(map, "getObject");
+	lua_pushinteger(map, -2);
+	int error = lua_pcall(map, 1, 2, 0);
+	if (error)
+		throw;
+	ret.y = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+	ret.x = lua_tonumber(map, -1);
+	lua_pop(map, 1);
+
+	goal = new GameObject(ret, glm::vec3(1, 0, 0), 0.4, 0.4);
+}
+
 void Game::createObject(int index)
 {
 	vec2 scale;
@@ -120,11 +137,16 @@ void Game::Render()
 	{
 		renderer->Render(allObjects[c]);
 	}
+
+	renderer->Render(goal);
+
 	renderer->setBtnProgram();
 	for (int c = 0; c < nrOfButtons; c++)
 	{
 		renderer->Render(allButtons[c]);
 	}
+
+	
 }
 
 string Game::update()
@@ -142,6 +164,8 @@ string Game::update()
 			throw;
 		delete player;
 		createPlayer();
+		delete goal;
+		createGoal();
 		for (int c = 0; c < nrOfObjects; c++)
 		{
 			delete allObjects[c];
@@ -233,6 +257,17 @@ string Game::update()
 	}
 
 	player->getCorners(corners);
+	if (goalCollide(corners))
+	{
+		for (int c = 0; c < 4; c++)
+		{
+			exit(0);
+		}
+	}
+
+	this->goalUpdate();
+
+	player->getCorners(corners);
 	if (collide(corners))
 	{
 		for (int c = 0; c < 4; c++)
@@ -276,4 +311,41 @@ bool Game::collide(vec2 playerCorners[])
 		lua_pop(scripts, 1);
 	}	
 	return hit;
+}
+
+bool Game::goalCollide(vec2 playerCorners[])
+{
+	bool hit = false;
+	vec2 map[4];
+	goal->getCorners(map);
+	lua_getglobal(scripts, "intersects");
+	float cNWx = playerCorners[NW].x;
+	float cSEx = playerCorners[SE].x;
+	float cNWy = playerCorners[NW].y;
+	float cSEy = playerCorners[SE].y;
+	float eNWx = map[NW].x;
+	float eSEx = map[SE].x;
+	float eNWy = map[NW].y;
+	float eSEy = map[SE].y;
+	lua_pushnumber(scripts, cNWx);
+	lua_pushnumber(scripts, cNWy);
+	lua_pushnumber(scripts, cSEx);
+	lua_pushnumber(scripts, cSEy);
+	lua_pushnumber(scripts, eNWx);
+	lua_pushnumber(scripts, eNWy);
+	lua_pushnumber(scripts, eSEx);
+	lua_pushnumber(scripts, eSEy);
+
+	int error = lua_pcall(scripts, 8, 1, 0);
+	if (error)
+		throw;
+	hit = lua_toboolean(scripts, -1);
+	lua_pop(scripts, 1);
+
+	return hit;
+}
+
+void Game::goalUpdate()
+{
+	this->goal->updateColor();
 }

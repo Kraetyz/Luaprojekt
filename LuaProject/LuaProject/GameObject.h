@@ -26,8 +26,13 @@ public:
 	GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY);
 	void getCorners(vec2 toFill[]);
 	vec3 getColor();
+	void updateColor();
+	void goalUpdate();
 	void moveX(float newX, int index);
 	void moveY(float newY, int index);
+	int rForward;
+	int gForward;
+	int bForward;
 };
 
 #endif
