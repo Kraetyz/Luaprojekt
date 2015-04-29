@@ -118,6 +118,9 @@
     <Text Include="menuButtons.txt" />
     <Text Include="testscript.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Error.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
