@@ -4,7 +4,7 @@ Button::Button() : GameObject()
 {
 }
 
-Button::Button(vec2 pos, string name) : GameObject(pos, vec3(0,0,0), 1, 1)
+Button::Button(vec2 pos, vec2 size, string name) : GameObject(pos, vec3(0, 0, 0), size.x, size.y)
 {
 	this->name = name;
 }

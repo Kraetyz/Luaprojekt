@@ -6,9 +6,6 @@
 class Menu : public State
 {
 private:
-	Renderer* renderer;
-	Button** buttons;
-	int nrOfButtons;
 public:
 	Menu();
 	~Menu();

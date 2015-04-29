@@ -14,6 +14,16 @@
 #include "Game.h"
 #include "Menu.h"
 
+#include "Lua/lua.hpp"
+#include "Lua/lauxlib.h"
+#include "Lua/lualib.h"
+
+lua_State* buttonState;
+Button buttons[10];
+int nrOfButtons = 0;
+
+State* game;
+
 HWND InitWindow(HINSTANCE hInstance);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HGLRC CreateOpenGLContext(HWND wndHandle);
@@ -25,7 +35,60 @@ void SetViewport()
 	glViewport(0, 0, 1280, 768);
 }
 
-State* game;
+static int killThroughLua(lua_State* L)
+{
+	if (true)
+		throw;
+	return 0;
+}
+
+void clickUpdate(HWND* window)
+{
+	POINT pCur;
+	GetCursorPos(&pCur);
+	ScreenToClient(*window, &pCur);
+	lua_getglobal(buttonState, "clickCheck");
+	float mouseX = (pCur.x - (1280 / 2)) / 32.0f;
+	float mouseY = -(pCur.y - (768 / 2)) / ((1280.0f / 768.0f)*32.0f);
+	lua_pushnumber(buttonState, mouseX);
+	lua_pushnumber(buttonState, mouseY);
+	if (lua_pcall(buttonState, 2, 1, 0))
+		throw;
+	bool weHaveClickBoys = lua_toboolean(buttonState, -1);
+	lua_pop(buttonState, 1);
+}
+
+void setupButtons()
+{
+	glm::vec2 northwest, southeast, pos, size;
+	lua_getglobal(buttonState, "nrOfButtons");
+	nrOfButtons = lua_tointeger(buttonState, -1);
+	lua_pop(buttonState, 1);
+	for (int c = 1; c < nrOfButtons+1; c++)
+	{
+		lua_getglobal(buttonState, "getButton");
+		lua_pushinteger(buttonState, c);
+		lua_pcall(buttonState, 1, 5, 0);
+		string buttonType = lua_tostring(buttonState, -1);
+		southeast.y = lua_tonumber(buttonState, -2);
+		southeast.x = lua_tonumber(buttonState, -3);
+		northwest.y = lua_tonumber(buttonState, -4);
+		northwest.x = lua_tonumber(buttonState, -5);
+		lua_pop(buttonState, 5);
+		pos = glm::vec2((northwest.x + southeast.x) / 2.0f, (northwest.y + southeast.y) / 2.0f);
+		size = glm::vec2(southeast.x - northwest.x, northwest.y - southeast.y);
+		buttons[c-1] = Button(pos, size, buttonType);
+		buttons[c-1].loadBMP("Hej.bmp");
+	}
+}
+
+void buttonRender()
+{
+	for (int c = 0; c < nrOfButtons; c++)
+	{
+		game->RenderButton(&buttons[c]);
+	}
+}
 
 void Update()
 {
@@ -38,6 +101,7 @@ void Update()
 	else
 	{
 		game->Render();
+		buttonRender();
 	}
 }
 
@@ -59,8 +123,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		ShowWindow(wndHandle, nCmdShow);
 
 		game = new Menu();
+
+		buttonState = luaL_newstate();
+		luaL_openlibs(buttonState);
+		lua_register(buttonState, "execute", killThroughLua);
+		if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
+			throw;
+		setupButtons();
+
 		while (WM_QUIT != msg.message)
 		{
+			if (msg.message == WM_LBUTTONDOWN)
+				clickUpdate(&wndHandle);
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
@@ -79,6 +153,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		wglDeleteContext(hRC);
 		DestroyWindow(wndHandle);
 	}
+
+	lua_close(buttonState);
 
 	return (int)msg.wParam;
 }

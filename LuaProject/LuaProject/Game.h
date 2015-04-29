@@ -15,9 +15,6 @@ private:
 	GameObject* player;
 	GameObject** allObjects;
 	int nrOfObjects;
-	Button** allButtons;
-	int nrOfButtons;
-	Renderer* renderer;
 	lua_State* scripts = 0;
 	lua_State* map = 0;
 

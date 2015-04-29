@@ -3,13 +3,6 @@
 
 Game::Game()
 {
-	nrOfButtons = 1;
-	allButtons = new Button*[nrOfButtons];
-	//nrOfButtons = 0; //THUGLÖSNING för att jag inte har några knappar än
-	allButtons[0] = new Button(vec2(-15, -8), "Hejsanknapp");
-	allButtons[0]->loadBMP("Hej.bmp");
-
-	renderer = new Renderer();
 	scripts = luaL_newstate();
 	luaL_openlibs(scripts); /* opens the standard libraries */
 
@@ -31,7 +24,7 @@ Game::Game()
 
 	lua_getglobal(map, "RADIUS");
 	float rad = lua_tonumber(map, -1);
-	renderer->setRadius(rad);
+	render->setRadius(rad);
 	lua_pop(map, 1);
 	lua_getglobal(map, "BACKR");
 	float r = lua_tonumber(map, -1);
@@ -40,24 +33,17 @@ Game::Game()
 	lua_getglobal(map, "BACKB");
 	float b = lua_tonumber(map, -1);
 	lua_pop(map, 3);
-	renderer->setClearColor(r, g, b);
+	render->setClearColor(r, g, b);
 }
 
 Game::~Game()
 {
 	delete player;
-	delete renderer;
 	for (int c = 0; c < nrOfObjects; c++)
 	{
 		delete allObjects[c];
 	}
 	delete[]allObjects;
-
-	for (int c = 0; c < nrOfButtons; c++)
-	{
-		delete allButtons[c];
-	}
-	delete[]allButtons;
 
 	lua_close(scripts);
 	lua_close(map);
@@ -114,16 +100,11 @@ void Game::createObject(int index)
 void Game::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderer->setProgram();
-	renderer->Render(player, player);
+	render->setProgram();
+	render->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)
 	{
-		renderer->Render(allObjects[c]);
-	}
-	renderer->setBtnProgram();
-	for (int c = 0; c < nrOfButtons; c++)
-	{
-		renderer->Render(allButtons[c]);
+		render->Render(allObjects[c]);
 	}
 }
 
@@ -148,7 +129,7 @@ string Game::update()
 			createObject(c);
 		}
 		lua_getglobal(map, "RADIUS");
-		renderer->setRadius(lua_tonumber(map, -1));
+		render->setRadius(lua_tonumber(map, -1));
 		lua_getglobal(map, "BACKR");
 		float r = lua_tonumber(map, -1);
 		lua_getglobal(map, "BACKG");
@@ -156,7 +137,7 @@ string Game::update()
 		lua_getglobal(map, "BACKB");
 		float b = lua_tonumber(map, -1);
 		lua_pop(map, 3);
-		renderer->setClearColor(r, g, b);
+		render->setClearColor(r, g, b);
 	}
 	
 	float oldX, oldY;

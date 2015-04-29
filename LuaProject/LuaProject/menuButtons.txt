@@ -1,0 +1,47 @@
+buttonone = {13, -5, 15, -7, "hej"} -- NWx, NWy, SEx, SEy, name
+buttontwo = {-3, 7, 3, 5, "hej"} -- NWx, NWy, SEx, SEy, name
+buttonthree = {-3, -4, 3, -6, "hej"} -- NWx, NWy, SEx, SEy, name
+
+nrOfButtons = 3
+buttonList = {buttonone, buttontwo, buttonthree}
+
+function clickCheck(mouseX, mouseY)
+	for c=1, nrOfButtons do
+		if intersects(mouseX, mouseY, c) then
+			if (c == 1) then
+				--button one function
+				execute();
+				return true;
+			end
+			if (c == 1) then
+				--button two function
+				return true;
+			end
+			if (c == 1) then
+				--button three function
+				return true;
+			end
+		end
+	end
+	return false;
+end
+
+function intersects(mouseX, mouseY, buttonIndex)
+	if (mouseX < buttonList[buttonIndex][1]) then
+		return false
+	end
+	if (mouseX > buttonList[buttonIndex][3]) then
+		return false
+	end
+	if (mouseY < buttonList[buttonIndex][4]) then
+		return false
+	end
+	if (mouseY > buttonList[buttonIndex][2]) then
+		return false
+	end
+	return true
+end
+
+function getButton(index)
+	return buttonList[index][1], buttonList[index][2], buttonList[index][3], buttonList[index][4], buttonList[index][5]
+end
