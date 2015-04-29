@@ -3,6 +3,10 @@
 
 Game::Game()
 {
+	if (true)
+	{
+		throw; //Jag är en ful apa
+	}
 	nrOfButtons = 1;
 	allButtons = new Button*[nrOfButtons];
 	//nrOfButtons = 0; //THUGLÖSNING för att jag inte har några knappar än
