@@ -1,5 +1,6 @@
 --Player start position
 playerX = 0; playerY = 0;
+goalX = 8; goalY = 2;
 
 --Map's sight radius
 RADIUS = 0.2;
@@ -28,6 +29,9 @@ mapsX[10] = 1; mapsY[10] = 2; mapsC[10] = "white"; mapsScaleX[10] = 2; mapsScale
 function getObject(index)
 	if (index == -1) then
 		return playerX, playerY;
+	end
+	if (index == -2) then
+		return goalX, goalY;
 	end
 	if (index < NUMBEROFOBJECTS) then
 		return mapsX[index+1], mapsY[index+1], mapsC[index+1], mapsScaleX[index+1], mapsScaleY[index+1];

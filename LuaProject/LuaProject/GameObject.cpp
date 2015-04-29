@@ -28,6 +28,9 @@ GameObject::GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY)
 	corners[SW] = vec2(pos.x - sizeX*0.032, pos.y + sizeY*0.032*ratio);
 	corners[SE] = vec2(pos.x + sizeX*0.032, pos.y + sizeY*0.032*ratio);
 	color = rgb;
+	this->rForward = 1;
+	this->gForward = 1;
+	this->bForward = 1;
 }
 
 void GameObject::getCorners(vec2 toFill[])
@@ -53,3 +56,39 @@ void GameObject::moveY(float newY, int index)
 	corners[index].y = newY;
 }
 
+void GameObject::updateColor()
+{
+
+	this->color = vec3(this->color.b + (0.015*this->bForward) , this->color.g + (0.02*this->gForward) , this->color.r + (0.03*this->rForward));
+
+	if (this->color.b > 0.99)
+	{
+		this->bForward = -1;
+	}
+
+	if (this->color.g >0.99)
+	{
+		this->gForward = -1;
+	}
+
+	if (this->color.r >0.99)
+	{
+		this->rForward = -1;
+	}
+
+	if (this->color.b < 0.01)
+	{
+		this->bForward = 1;
+	}
+
+	if (this->color.g < 0.01)
+	{
+		this->gForward = 1;
+	}
+
+	if (this->color.r < 0.01)
+	{
+		this->rForward = 1;
+	}
+	
+}
