@@ -59,7 +59,7 @@ void GameObject::moveY(float newY, int index)
 void GameObject::updateColor()
 {
 
-	this->color = vec3(this->color.b + (0.02*this->bForward) , this->color.g + (0.02*this->gForward) , this->color.r + (0.03*this->rForward));
+	this->color = vec3(this->color.b + (0.015*this->bForward) , this->color.g + (0.02*this->gForward) , this->color.r + (0.03*this->rForward));
 
 	if (this->color.b > 0.99)
 	{
