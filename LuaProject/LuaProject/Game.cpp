@@ -3,9 +3,6 @@
 
 Game::Game()
 {
-	scripts = luaL_newstate();
-	luaL_openlibs(scripts); /* opens the standard libraries */
-
 	L = luaL_newstate();
 	luaL_openlibs(L); /* opens the standard libraries */
 	if (luaL_loadfile(L, "Error.lua") || lua_pcall(L, 0, 0, 0))
