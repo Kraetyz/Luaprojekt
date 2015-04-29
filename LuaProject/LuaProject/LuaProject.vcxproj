@@ -97,6 +97,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderHolder.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -114,7 +115,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="map.txt" />
+    <Text Include="menuButtons.txt" />
     <Text Include="testscript.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Error.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

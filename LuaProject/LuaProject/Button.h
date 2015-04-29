@@ -13,7 +13,7 @@ private:
 	string name;
 public:
 	Button();
-	Button(vec2 pos, string name);
+	Button(vec2 pos, vec2 size, string name);
 	bool isClicked(vec2 mousePos);
 	string getName();
 	GLuint getText();

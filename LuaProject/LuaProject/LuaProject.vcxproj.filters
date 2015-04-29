@@ -39,6 +39,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderHolder.h">
@@ -85,5 +88,13 @@
     <Text Include="map.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="menuButtons.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Error.lua">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
