@@ -143,6 +143,8 @@ void Game::createObject(int index)
 			col = vec3(0, 0, 1);
 		if (color == "white")
 			col = vec3(1, 1, 1);
+		if (color == "black")
+			col = vec3(0, 0, 0);
 		lua_pop(L, 1);
 		pos.y = lua_tonumber(L, -1);
 		lua_pop(L, 1);
