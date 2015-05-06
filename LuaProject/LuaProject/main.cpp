@@ -54,8 +54,8 @@ void clickUpdate(HWND* window)
 	GetCursorPos(&pCur);
 	ScreenToClient(*window, &pCur);
 	lua_getglobal(buttonState, "clickCheck");
-	float mouseX = (pCur.x - (1280 / 2)) / 32.0f;
-	float mouseY = -(pCur.y - (768 / 2)) / ((1280.0f / 768.0f)*32.0f);
+	float mouseX = ((pCur.x - (1280 / 2)) / 640.0f)*15;
+	float mouseY = (-(pCur.y - (768 / 2)) / 366.0f)*9;
 	lua_pushnumber(buttonState, mouseX);
 	lua_pushnumber(buttonState, mouseY);
 	if (lua_pcall(buttonState, 2, 1, 0))

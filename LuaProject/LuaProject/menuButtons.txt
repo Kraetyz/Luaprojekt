@@ -6,19 +6,21 @@ nrOfButtons = 3
 buttonList = {buttonone, buttontwo, buttonthree}
 
 function clickCheck(mouseX, mouseY)
-	for c=1, nrOfButtons do
-		if intersects(mouseX, mouseY, c) then
-			if (c == 1) then
+	for index=1, nrOfButtons do
+		if intersects(mouseX, mouseY, index) then
+			if (index == 1) then
 				--button one function
 				execute();
 				return true;
 			end
-			if (c == 1) then
+			if (index == 2) then
 				--button two function
+				execute();
 				return true;
 			end
-			if (c == 1) then
+			if (index == 3) then
 				--button three function
+				execute();
 				return true;
 			end
 		end
