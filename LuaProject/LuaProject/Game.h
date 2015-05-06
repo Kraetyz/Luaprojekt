@@ -34,6 +34,7 @@ public:
 	~Game();
 	void Render();
 	string update();
+	void restart();
 };
 
 #endif

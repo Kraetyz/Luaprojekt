@@ -1,6 +1,14 @@
-buttonone = {-15, -5, -13, -7, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
-buttontwo = {-3, 7, 3, 5, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
-buttonthree = {-3, -4, 3, -6, "HEIL.bmp"} -- NWx, NWy, SEx, SEy, name
+function exitGame()
+	execute();
+end
+
+function startItUp()
+	startGame();
+end
+
+buttonone = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
+buttontwo = {-3, 7, 3, 5, "Hej.bmp", startItUp} -- NWx, NWy, SEx, SEy, name, function
+buttonthree = {-3, -4, 3, -6, "HEIL.bmp"} -- NWx, NWy, SEx, SEy, name, function
 
 nrOfButtons = 3
 buttonList = {buttonone, buttontwo, buttonthree}
@@ -8,20 +16,9 @@ buttonList = {buttonone, buttontwo, buttonthree}
 function clickCheck(mouseX, mouseY)
 	for index=1, nrOfButtons do
 		if intersects(mouseX, mouseY, index) then
-			if (index == 1) then
-				--button one function
-				execute();
-				return true;
-			end
-			if (index == 2) then
-				--button two function
-				startGame();
-				return true;
-			end
-			if (index == 3) then
-				--button three function
-				execute();
-				return true;
+			if buttonList[index][6] ~= nil then
+					buttonList[index][6]();
+					return true;
 			end
 		end
 	end

@@ -436,3 +436,9 @@ void Game::goalUpdate()
 {
 	this->goal->updateColor();
 }
+
+void Game::restart()
+{
+	delete player;
+	createPlayer();
+}

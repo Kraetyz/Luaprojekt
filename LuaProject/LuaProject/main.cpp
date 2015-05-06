@@ -77,12 +77,21 @@ static int goToGame(lua_State* L)
 	return 0;
 }
 
+static int restartGame(lua_State* L)
+{
+	((Game*)state)->restart();
+	return 0;
+}
+
 void clickUpdate(HWND* window)
 {
 	POINT pCur;
 	GetCursorPos(&pCur);
 	ScreenToClient(*window, &pCur);
 	lua_getglobal(buttonState, "clickCheck");
+	lua_getglobal(buttonState, "nrOfButtons");
+	int buttonNr = lua_tointeger(buttonState, -1);
+	lua_pop(buttonState, 1);
 	float mouseX = ((pCur.x - (1280 / 2)) / 640.0f)*15;
 	float mouseY = (-(pCur.y - (768 / 2)) / 366.0f)*9;
 	lua_pushnumber(buttonState, mouseX);
@@ -112,6 +121,7 @@ void registerLuaFuncs()
 {
 	lua_register(buttonState, "execute", killThroughLua);
 	lua_register(buttonState, "startGame", goToGame);
+	lua_register(buttonState, "restartGame", restartGame);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -150,10 +160,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		buttonState = luaL_newstate();
 		luaL_openlibs(buttonState);
+
+		if (luaL_loadfile(buttonState, "Error.lua") || lua_pcall(buttonState, 0, 0, 0))
+		{
+			std::cout << "Error handler failed" << std::endl;
+			std::cerr << lua_tostring(buttonState, -1) << std::endl;
+			lua_pop(buttonState, 1);
+		}
+		lua_getglobal(buttonState, "ErrorHandler");
+		int luaErrorHandlerPos = lua_gettop(buttonState);
+
 		registerLuaFuncs();
-		if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
-			throw;
+
+		if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, luaErrorHandlerPos))
+		{
+			std::cout << "erroooor" << std::endl;
+			std::cout << lua_tostring(buttonState, -1) << std::endl;
+			lua_pop(buttonState, 1);
+		}
 		setupButtons();
+		lua_pop(buttonState, 1);
 
 		while (WM_QUIT != msg.message)
 		{

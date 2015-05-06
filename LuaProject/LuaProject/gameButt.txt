@@ -1,5 +1,13 @@
-buttonone = {-15, -2, -13, -4, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
-buttonheil = {-15, 6, -13, 4, "HEIL.bmp"} -- NWx, NWy, SEx, SEy, name
+function exitGame()
+	execute();
+end
+
+function resetGame()
+	restartGame();
+end
+
+buttonbajs = {-15, -2, -13, -4, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name
+buttonheil = {-15, 6, -13, 4, "HEIL.bmp", resetGame} -- NWx, NWy, SEx, SEy, name
 
 nrOfButtons = 2
-buttonList = {buttonone, buttonheil}
+buttonList = {buttonbajs, buttonheil}
