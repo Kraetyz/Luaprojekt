@@ -200,7 +200,7 @@ HWND InitWindow(HINSTANCE hInstance)
 
 	HWND handle = CreateWindow(
 		L"LUAbyrinth",
-		L"GAAAAME",
+		L"LUAbyrinth",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,

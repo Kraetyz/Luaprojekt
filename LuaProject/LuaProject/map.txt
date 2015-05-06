@@ -3,7 +3,7 @@ playerX = 0; playerY = 2;
 goalX = 8; goalY = 2;
 
 --Map's sight radius
-RADIUS = 1;
+RADIUS = 0.2;
 --Map's background color
 BACKR = 0.1; BACKG = 0.2; BACKB = 0.3;
 
