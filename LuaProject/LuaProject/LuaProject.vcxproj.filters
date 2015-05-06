@@ -91,6 +91,12 @@
     <Text Include="testscript.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="editorButtons.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameButt.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Error.lua">
