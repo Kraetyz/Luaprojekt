@@ -28,7 +28,7 @@ lua_State* buttonState;
 Button buttons[10];
 int nrOfButtons = 0;
 
-State* game;
+State* state;
 
 HWND InitWindow(HINSTANCE hInstance);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -49,8 +49,8 @@ static int killThroughLua(lua_State* L)
 
 static int goToGame(lua_State* L)
 {
-	delete game;
-	game = new Game();
+	delete state;
+	state = new Game();
 	return 0;
 }
 
@@ -90,7 +90,6 @@ void setupButtons()
 		pos = glm::vec2((northwest.x + southeast.x) / 2.0f, (northwest.y + southeast.y) / 2.0f);
 		size = glm::vec2(southeast.x - northwest.x, northwest.y - southeast.y);
 		buttons[c-1] = Button(pos, size, buttonType);
-		buttons[c-1].loadBMP("Hej.bmp");
 	}
 }
 
@@ -98,14 +97,14 @@ void buttonRender()
 {
 	for (int c = 0; c < nrOfButtons; c++)
 	{
-		game->RenderButton(&buttons[c]);
+		state->RenderButton(&buttons[c]);
 	}
 }
 
 void Update()
 {
-	string msg = game->update();
-	game->Render();
+	string msg = state->update();
+	state->Render();
 	buttonRender();
 }
 
@@ -147,7 +146,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		ShowWindow(wndHandle, nCmdShow);
 
-		game = new Menu();
+		state = new Menu();
 
 		buttonState = luaL_newstate();
 		luaL_openlibs(buttonState);

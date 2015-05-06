@@ -7,6 +7,7 @@ Button::Button() : GameObject()
 Button::Button(vec2 pos, vec2 size, string name) : GameObject(pos, vec3(0, 0, 0), size.x, size.y)
 {
 	this->name = name;
+	loadBMP(name);
 }
 
 bool Button::isClicked(vec2 mousePos)

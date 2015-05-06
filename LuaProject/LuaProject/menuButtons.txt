@@ -1,6 +1,6 @@
-buttonone = {13, -5, 15, -7, "hej"} -- NWx, NWy, SEx, SEy, name
-buttontwo = {-3, 7, 3, 5, "hej"} -- NWx, NWy, SEx, SEy, name
-buttonthree = {-3, -4, 3, -6, "hej"} -- NWx, NWy, SEx, SEy, name
+buttonone = {-15, -5, -13, -7, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
+buttontwo = {-3, 7, 3, 5, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
+buttonthree = {-3, -4, 3, -6, "HEIL.bmp"} -- NWx, NWy, SEx, SEy, name
 
 nrOfButtons = 3
 buttonList = {buttonone, buttontwo, buttonthree}

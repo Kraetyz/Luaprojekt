@@ -11,13 +11,13 @@ class Button : public GameObject
 private:
 	GLuint buttonTex;
 	string name;
+	bool loadBMP(std::string imagePath);
 public:
 	Button();
 	Button(vec2 pos, vec2 size, string name);
 	bool isClicked(vec2 mousePos);
 	string getName();
 	GLuint getText();
-	bool loadBMP(std::string imagePath);
 };
 
 #endif
