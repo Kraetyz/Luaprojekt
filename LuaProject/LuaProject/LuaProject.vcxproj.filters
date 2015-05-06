@@ -42,6 +42,9 @@
     <ClCompile Include="State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderHolder.h">
@@ -98,6 +101,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="gameButt.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="EditorButt.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

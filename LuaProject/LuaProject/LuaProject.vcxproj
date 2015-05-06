@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="EditorButt.txt" />
     <Text Include="editorButtons.txt" />
     <Text Include="gameButt.txt" />
     <Text Include="map.txt" />
