@@ -43,8 +43,14 @@ void SetViewport()
 
 static int killThroughLua(lua_State* L)
 {
-	if (true)
-		throw;
+	PostQuitMessage(0);
+	return 0;
+}
+
+static int goToGame(lua_State* L)
+{
+	delete game;
+	game = new Game();
 	return 0;
 }
 
@@ -99,16 +105,14 @@ void buttonRender()
 void Update()
 {
 	string msg = game->update();
-	if (msg == "StartGame")
-	{
-		delete game;
-		game = new Game();
-	}
-	else
-	{
-		game->Render();
-		buttonRender();
-	}
+	game->Render();
+	buttonRender();
+}
+
+void registerLuaFuncs()
+{
+	lua_register(buttonState, "execute", killThroughLua);
+	lua_register(buttonState, "startGame", goToGame);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
@@ -147,7 +151,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		buttonState = luaL_newstate();
 		luaL_openlibs(buttonState);
-		lua_register(buttonState, "execute", killThroughLua);
+		registerLuaFuncs();
 		if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
 			throw;
 		setupButtons();

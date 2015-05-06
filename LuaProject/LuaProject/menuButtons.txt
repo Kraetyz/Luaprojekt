@@ -15,7 +15,7 @@ function clickCheck(mouseX, mouseY)
 			end
 			if (index == 2) then
 				--button two function
-				execute();
+				startGame();
 				return true;
 			end
 			if (index == 3) then
