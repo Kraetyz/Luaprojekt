@@ -21,29 +21,7 @@ Editor::Editor()
 		lua_pop(L, 1);
 	}
 
-	if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-	{
-		std::cerr << lua_tostring(L, -1) << std::endl;
-		lua_pop(L, 1);
-	}
-	//createPlayer();
-	//createGoal();
-	lua_getglobal(L, "NUMBEROFOBJECTS");
-	nrOfObjects = lua_tointeger(L, -1);
-	lua_pop(L, 1);
-	allObjects = new GameObject*[nrOfObjects];
-	for (int c = 0; c < nrOfObjects; c++)
-		createObject(c);
-
-	render->setRadius(20.0f);
-	lua_getglobal(L, "BACKR");
-	float r = lua_tonumber(L, -1);
-	lua_getglobal(L, "BACKG");
-	float g = lua_tonumber(L, -1);
-	lua_getglobal(L, "BACKB");
-	float b = lua_tonumber(L, -1);
-	lua_pop(L, 3);
-	render->setClearColor(r, g, b);
+	render->setClearColor(0.1f, 0.2f, 0.3f);
 	lua_pop(L, 1);
 }
 
