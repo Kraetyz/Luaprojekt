@@ -12,6 +12,7 @@ private:
 	GLuint buttonTex;
 	string name;
 	bool loadBMP(std::string imagePath);
+	void emptyTexture();
 public:
 	Button();
 	Button(vec2 pos, vec2 size, string name);

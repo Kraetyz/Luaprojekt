@@ -69,6 +69,16 @@ static int killThroughLua(lua_State* L)
 	return 0;
 }
 
+static int goToMenu(lua_State* L)
+{
+	delete state;
+	state = new Menu();
+	if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
+		throw;
+	setupButtons();
+	return 0;
+}
+
 static int goToGame(lua_State* L)
 {
 	delete state;
@@ -106,6 +116,16 @@ static int screenClick(lua_State* L)
 	return 0;
 }
 
+static int setMode(lua_State* L)
+{
+	int mode = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
+	((Editor*)state)->setMode(mode);
+
+	return 0;
+}
+
 void clickUpdate()
 {
 	POINT pCur;
@@ -136,8 +156,10 @@ void buttonRender()
 void Update()
 {
 	string msg = state->update();
-	state->Render();
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	buttonRender();
+	state->Render();
 }
 
 void registerLuaFuncs()
@@ -147,6 +169,8 @@ void registerLuaFuncs()
 	lua_register(buttonState, "restartGame", restartGame);
 	lua_register(buttonState, "startEditor", goToEditor);
 	lua_register(buttonState, "click", screenClick);
+	lua_register(buttonState, "setMode", setMode);
+	lua_register(buttonState, "backToMenu", goToMenu);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

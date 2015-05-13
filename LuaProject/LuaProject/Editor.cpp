@@ -157,7 +157,6 @@ void Editor::createObject(int index)
 
 void Editor::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	render->setProgram();
 	render->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)

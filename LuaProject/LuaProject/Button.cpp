@@ -7,7 +7,10 @@ Button::Button() : GameObject()
 Button::Button(vec2 pos, vec2 size, string name) : GameObject(pos, vec3(0, 0, 0), size.x, size.y)
 {
 	this->name = name;
-	loadBMP(name);
+	if (name != "Invisible")
+		loadBMP(name);
+	else
+		emptyTexture();
 }
 
 bool Button::isClicked(vec2 mousePos)
@@ -24,6 +27,16 @@ string Button::getName()
 GLuint Button::getText()
 {
 	return buttonTex;
+}
+
+void Button::emptyTexture()
+{
+	glGenTextures(1, &buttonTex);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(0, buttonTex);
 }
 
 bool Button::loadBMP(std::string imagepath)

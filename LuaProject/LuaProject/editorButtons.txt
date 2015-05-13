@@ -6,8 +6,32 @@ function exitGame()
 	execute();
 end
 
-exitButton = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
-clickButton = {-4, 10, 16, -10, "Hej.bmp", clickScreen} -- NWx, NWy, SEx, SEy, name, function
+function goToMenu()
+	backToMenu();
+end
 
-nrOfButtons = 2
-buttonList = {exitButton, clickButton}
+function setWallPlaceMode()
+	setMode(1);
+end
+
+function setPlayerPlaceMode()
+	setMode(2);
+end
+
+function setGoalPlaceMode()
+	setMode(3);
+end
+
+function setEmptyMode()
+	setMode(0);
+end
+
+exitButton = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
+menuButton = {-12, -5, -10, -7, "Hej.bmp", goToMenu} -- NWx, NWy, SEx, SEy, name, function
+clickButton = {-4, 10, 16, -10, "Invisible", clickScreen} -- NWx, NWy, SEx, SEy, name, function
+wallPlaceButton = {-15, 8, -13, 6, "HEIL.bmp", setWallPlaceMode}
+playerPlaceButton = {-15, 5, -13, 3, "HEIL.bmp", setPlayerPlaceMode}
+goalPlaceButton = {-15, 2, -13, 0, "HEIL.bmp", setGoalPlaceMode}
+
+nrOfButtons = 6
+buttonList = {exitButton, menuButton, clickButton, wallPlaceButton, playerPlaceButton, goalPlaceButton}
