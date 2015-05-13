@@ -39,5 +39,7 @@ public:
 	{
 		this->mode = mode;
 	}
+
+	void saveMap();
 };
 #endif

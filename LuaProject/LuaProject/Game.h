@@ -36,7 +36,6 @@ public:
 	string update();
 	void restart();
 	void loadMap();
-	void saveMap();
 };
 
 #endif

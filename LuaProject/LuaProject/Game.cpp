@@ -528,9 +528,5 @@ void Game::loadMap()
 			}
 		}
 	}
-}
-
-void Game::saveMap()
-{
-
+	in.close();
 }

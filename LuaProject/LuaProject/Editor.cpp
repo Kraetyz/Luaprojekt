@@ -1,5 +1,6 @@
 #include "Editor.h"
 #include "Windows.h"
+#include <fstream>
 
 Editor::Editor()
 {
@@ -156,35 +157,35 @@ string Editor::update()
 
 	if (GetKeyState('R') && GetAsyncKeyState('R'))
 	{
-		if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-		{
-			std::cout << " ERROR: " << std::endl;
-			std::cout << lua_tostring(L, -1) << std::endl;
-			lua_pop(L, 1);
-		}
-		if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-		{
-			std::cout << " ERROR: " << std::endl;
-			std::cout << lua_tostring(L, -1) << std::endl;
-			lua_pop(L, 1);
-		}
-		delete player;
-		createPlayer();
-		for (int c = 0; c < nrOfObjects; c++)
-		{
-			delete allObjects[c];
-			createObject(c);
-		}
-		lua_getglobal(L, "RADIUS");
-		render->setRadius(lua_tonumber(L, -1));
-		lua_getglobal(L, "BACKR");
-		float r = lua_tonumber(L, -1);
-		lua_getglobal(L, "BACKG");
-		float g = lua_tonumber(L, -1);
-		lua_getglobal(L, "BACKB");
-		float b = lua_tonumber(L, -1);
-		lua_pop(L, 3);
-		render->setClearColor(r, g, b);
+	if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+	{
+	std::cout << " ERROR: " << std::endl;
+	std::cout << lua_tostring(L, -1) << std::endl;
+	lua_pop(L, 1);
+	}
+	if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
+	{
+	std::cout << " ERROR: " << std::endl;
+	std::cout << lua_tostring(L, -1) << std::endl;
+	lua_pop(L, 1);
+	}
+	delete player;
+	createPlayer();
+	for (int c = 0; c < nrOfObjects; c++)
+	{
+	delete allObjects[c];
+	createObject(c);
+	}
+	lua_getglobal(L, "RADIUS");
+	render->setRadius(lua_tonumber(L, -1));
+	lua_getglobal(L, "BACKR");
+	float r = lua_tonumber(L, -1);
+	lua_getglobal(L, "BACKG");
+	float g = lua_tonumber(L, -1);
+	lua_getglobal(L, "BACKB");
+	float b = lua_tonumber(L, -1);
+	lua_pop(L, 3);
+	render->setClearColor(r, g, b);
 	}
 
 	this->goalUpdate();
@@ -200,5 +201,62 @@ void Editor::goalUpdate()
 
 void Editor::giveCursorPos(glm::vec2 pos)
 {
+
+}
+
+void Editor::saveMap()
+{
+	ofstream out;
+	out.open("Map1.txt");
+
+	string line = "radius 0.2";
+
+	out << line << endl;
+
+	line = "fog 0.1 0.2 0.3";
+
+	out << line << endl;
+
+	float playerX;
+	float playerY;
+
+	vec2 Corners[4];
+	if (player)
+	{
+		player->getCorners(Corners);
+
+		playerX = Corners[0].x + 0.01;
+		playerY = Corners[0].y - 0.01;
+	}
+	else
+	{
+		playerX = 0;
+		playerY = 0;
+	}
+	line = "player " + char(playerX) + char(" ") + char(playerY);
+
+	out << line << endl;
+
+	float goalX, goalY;
+	if (goal)
+	{
+		goal->getCorners(Corners);
+
+		goalX = Corners[0].x + 0.01;
+		goalY = Corners[0].y - 0.01;
+	}
+	else
+	{
+		goalX = 2;
+		goalY = 2;
+	}
+	line = "goal " + char(goalX) + char(" ") + char(goalY);
+
+	out << line << endl;
+
 	
+
+
+
+	out.close();
 }
