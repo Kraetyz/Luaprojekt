@@ -149,7 +149,7 @@ void Editor::saveMap()
 	float goalX, goalY;
 	if (goal)
 	{
-		goal->getOrigPos();
+		pos = goal->getOrigPos();
 
 		goalX = pos.x;
 		goalY = pos.y;
