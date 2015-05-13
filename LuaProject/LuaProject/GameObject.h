@@ -5,6 +5,7 @@
 #include <gl/GL.h>
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtx/transform.hpp"
+#include <string>
 
 #define NW 0
 #define SW 1
@@ -12,6 +13,7 @@
 #define SE 3
 
 using namespace glm;
+using namespace std;
 
 class GameObject
 {
@@ -24,6 +26,7 @@ protected:
 public:
 	GameObject();
 	GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY);
+	GameObject(vec2 pos, string clr, float sizeX, float sizeY);
 	void getCorners(vec2 toFill[]);
 	vec3 getColor();
 	void updateColor();

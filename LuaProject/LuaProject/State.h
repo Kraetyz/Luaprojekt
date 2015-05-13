@@ -16,13 +16,20 @@ using namespace std;
 class State
 {
 protected:
-	Renderer* render;
+	Renderer* render = 0;
+	/*
+	GameObject* goal = 0;
+	GameObject* player = 0;
+	GameObject** allObjects = 0;
+	int nrOfObjects;*/
 public:
 	State();
 	virtual ~State();
 	virtual string update() = 0;
 	virtual void Render() = 0;
 	void RenderButton(Button* toRender);
+
+
 };
 
 #endif

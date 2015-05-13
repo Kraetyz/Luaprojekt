@@ -33,6 +33,32 @@ GameObject::GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY)
 	this->bForward = 1;
 }
 
+GameObject::GameObject(vec2 pos, string clr, float sizeX, float sizeY)
+{
+	float ratio = 1280.0f / 768.0f;
+	pos.x = pos.x*0.064;
+	pos.y = pos.y*0.064*ratio;
+	corners[NW] = vec2(pos.x - sizeX*0.032, pos.y - sizeY*0.032*ratio);
+	corners[NE] = vec2(pos.x + sizeX*0.032, pos.y - sizeY*0.032*ratio);
+	corners[SW] = vec2(pos.x - sizeX*0.032, pos.y + sizeY*0.032*ratio);
+	corners[SE] = vec2(pos.x + sizeX*0.032, pos.y + sizeY*0.032*ratio);
+	if (clr == "green")
+	{
+		color = vec3(0, 1, 0);
+	}
+	if (clr == "blue")
+	{
+		color = vec3(0, 0, 1);
+	}
+	if (clr == "yellow")
+	{
+		color = vec3(1, 1, 0);
+	}
+	this->rForward = 1;
+	this->gForward = 1;
+	this->bForward = 1;
+}
+
 void GameObject::getCorners(vec2 toFill[])
 {
 	toFill[NW] = corners[NW];

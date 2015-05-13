@@ -1,5 +1,8 @@
 #include "Game.h"
 #include "Windows.h"
+#include <fstream>
+#include <sstream>
+#include <string>
 
 Game::Game()
 {
@@ -26,15 +29,17 @@ Game::Game()
 		std::cerr << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
 	}
-	createPlayer();
-	createGoal();
-	lua_getglobal(L, "NUMBEROFOBJECTS");
+	//createPlayer();
+	//createGoal();
+	loadMap();
+	/*lua_getglobal(L, "NUMBEROFOBJECTS");
 	nrOfObjects = lua_tointeger(L, -1);
 	lua_pop(L, 1);
 	allObjects = new GameObject*[nrOfObjects];
 	for (int c = 0; c < nrOfObjects; c++)
 		createObject(c);
-
+		*/
+	
 	lua_getglobal(L, "RADIUS");
 	float rad = lua_tonumber(L, -1);
 	render->setRadius(rad);
@@ -440,4 +445,98 @@ void Game::restart()
 {
 	delete player;
 	createPlayer();
+}
+
+void Game::loadMap()
+{
+	ifstream in;
+	in.open("Map1.txt");
+
+	istringstream ss;
+	string line;
+	string token;
+
+	while (getline(in, line))
+	{
+		ss = istringstream(line);
+		ss >> token;
+
+		if (token == "player")
+		{
+			token = "";
+			ss >> token;
+			float pX = atof(token.c_str());
+			token = "";
+			ss >> token;
+			float pY = atof(token.c_str());
+			if (player)
+				delete player;
+			player = new GameObject(vec2(pX, pY), glm::vec3(1, 0, 0), 0.8, 0.8);
+		}
+
+		if (token == "goal")
+		{
+			token = "";
+			ss >> token;
+			float gX = atof(token.c_str());
+			token = "";
+			ss >> token;
+			float gY = atof(token.c_str());
+			if (goal)
+				delete goal;
+			goal = new GameObject(vec2(gX, gY), glm::vec3(1, 0, 0), 0.4, 0.4);
+		}
+
+		if (token == "nrOfObjects")
+		{
+			token = "";
+			ss >> token;
+			int nr = atoi(token.c_str());
+			if (allObjects)
+			{
+				for (int i = 0; i < nrOfObjects; i++)
+				{
+					delete allObjects[i];
+				}
+				delete[] allObjects;
+			}
+
+			allObjects = new GameObject*[nr];
+			nrOfObjects = nr;
+			/*if (goal)
+			delete goal;
+			goal = new GameObject(vec2(oX, oY), glm::vec3(1, 0, 0), 0.4, 0.4);*/
+		}
+
+		if (token == "wall")
+		{
+			static int walls = 0;
+
+			token = "";
+			ss >> token;
+			float wX = atof(token.c_str());
+
+			token = "";
+			ss >> token;
+			float wY = atof(token.c_str());
+
+			token = "";
+			ss >> token;
+			string clr = token;
+			if (allObjects)
+			{
+				if (walls < nrOfObjects)
+				{
+
+					allObjects[walls] = new GameObject(vec2(wX, wY), clr, 1.0, 1.0);
+					walls++;
+				}
+			}
+		}
+	}
+}
+
+void Game::saveMap()
+{
+
 }

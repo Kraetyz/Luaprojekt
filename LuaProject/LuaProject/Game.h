@@ -14,9 +14,9 @@
 class Game : public State
 {
 private:
-	GameObject* goal;
-	GameObject* player;
-	GameObject** allObjects;
+	GameObject* goal = 0;
+	GameObject* player = 0;
+	GameObject** allObjects = 0;
 	int nrOfObjects;
 	lua_State* L = 0;
 	//lua_State* map = 0;
@@ -35,6 +35,8 @@ public:
 	void Render();
 	string update();
 	void restart();
+	void loadMap();
+	void saveMap();
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "State.h"
 
+
 State::~State()
 {
 	delete render;
@@ -15,3 +16,4 @@ void State::RenderButton(Button* toRender)
 	render->setBtnProgram();
 	render->Render(toRender);
 }
+

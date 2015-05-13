@@ -119,6 +119,7 @@
     <Text Include="editorButtons.txt" />
     <Text Include="gameButt.txt" />
     <Text Include="map.txt" />
+    <Text Include="Map1.txt" />
     <Text Include="menuButtons.txt" />
     <Text Include="testscript.txt" />
   </ItemGroup>
