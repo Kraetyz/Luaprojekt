@@ -14,12 +14,15 @@
 class Editor : public State
 {
 private:
+	float clickTimer;
 	int mode; //0 = nothing, 1 = wall, 2 = player, 3 = goal
+	string currentColor;
 
 	GameObject* goal;
 	GameObject* player;
 	GameObject** allObjects;
 	int nrOfObjects;
+	int objectMax;
 	lua_State* L = 0;
 	//lua_State* map = 0;
 	int luaErrorHandlerPos = 0;
@@ -27,7 +30,9 @@ private:
 	void goalUpdate();
 	void createGoal();
 	void createPlayer();
-	void createObject(int index);
+	void createObject(glm::vec2 pos, string col);
+
+	void expandObjectArray();
 public:
 	Editor();
 	~Editor();
@@ -41,5 +46,9 @@ public:
 	}
 
 	void saveMap();
+	void setCurrentColor(string clr)
+	{
+		currentColor = clr;
+	}
 };
 #endif
