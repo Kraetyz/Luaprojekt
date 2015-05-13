@@ -14,6 +14,8 @@
 class Editor : public State
 {
 private:
+	int mode; //0 = nothing, 1 = wall, 2 = player, 3 = goal
+
 	GameObject* goal;
 	GameObject* player;
 	GameObject** allObjects;
@@ -33,5 +35,9 @@ public:
 	string update();
 
 	void giveCursorPos(glm::vec2 pos);
+	void setMode(int mode)
+	{
+		this->mode = mode;
+	}
 };
 #endif
