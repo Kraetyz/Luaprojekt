@@ -24,35 +24,7 @@ Game::Game()
 		lua_pop(L, 1);
 	}
 
-	if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-	{
-		std::cerr << lua_tostring(L, -1) << std::endl;
-		lua_pop(L, 1);
-	}
-	//createPlayer();
-	//createGoal();
 	loadMap();
-	/*lua_getglobal(L, "NUMBEROFOBJECTS");
-	nrOfObjects = lua_tointeger(L, -1);
-	lua_pop(L, 1);
-	allObjects = new GameObject*[nrOfObjects];
-	for (int c = 0; c < nrOfObjects; c++)
-		createObject(c);
-		*/
-	
-	lua_getglobal(L, "RADIUS");
-	float rad = lua_tonumber(L, -1);
-	render->setRadius(rad);
-	lua_pop(L, 1);
-	lua_getglobal(L, "BACKR");
-	float r = lua_tonumber(L, -1);
-	lua_getglobal(L, "BACKG");
-	float g = lua_tonumber(L, -1);
-	lua_getglobal(L, "BACKB");
-	float b = lua_tonumber(L, -1);
-	lua_pop(L, 3);
-	render->setClearColor(r, g, b);
-	lua_pop(L, 1);
 }
 
 Game::~Game()
@@ -461,7 +433,29 @@ void Game::loadMap()
 		ss = istringstream(line);
 		ss >> token;
 
-		if (token == "player")
+		if (token == "radius")
+		{
+			token = "";
+			ss >> token;
+			float r = atof(token.c_str());
+			render->setRadius(r);
+		}
+
+		else if (token == "fog")
+		{
+			token = "";
+			ss >> token;
+			float r = atof(token.c_str());
+			token = "";
+			ss >> token;
+			float g = atof(token.c_str());
+			token = "";
+			ss >> token;
+			float b = atof(token.c_str());
+			render->setClearColor(r, g, b);
+		}
+
+		else if (token == "player")
 		{
 			token = "";
 			ss >> token;
@@ -474,7 +468,7 @@ void Game::loadMap()
 			player = new GameObject(vec2(pX, pY), glm::vec3(1, 0, 0), 0.8, 0.8);
 		}
 
-		if (token == "goal")
+		else if (token == "goal")
 		{
 			token = "";
 			ss >> token;
@@ -487,7 +481,7 @@ void Game::loadMap()
 			goal = new GameObject(vec2(gX, gY), glm::vec3(1, 0, 0), 0.4, 0.4);
 		}
 
-		if (token == "nrOfObjects")
+		else if (token == "nrOfObjects")
 		{
 			token = "";
 			ss >> token;
@@ -508,7 +502,7 @@ void Game::loadMap()
 			goal = new GameObject(vec2(oX, oY), glm::vec3(1, 0, 0), 0.4, 0.4);*/
 		}
 
-		if (token == "wall")
+		else if (token == "wall")
 		{
 			static int walls = 0;
 
