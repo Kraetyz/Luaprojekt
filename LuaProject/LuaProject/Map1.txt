@@ -1,7 +1,12 @@
 radius 0.2
 fog 0.1 0.2 0.3
 player 0 0
-goal -4 4
-nrOfObjects 2
-wall -3 4 green
-wall -2 4 blue
+goal 2 2
+nrOfObjects 7
+wall 4.42969 3.71311 green
+wall 7.89844 5.09016 green
+wall 8.50781 0.270492 green
+wall 8.27344 2.95082 green
+wall 9.86719 -0.836066 green
+wall 6.23438 -5.23771 green
+wall -0.492187 -7.20492 green

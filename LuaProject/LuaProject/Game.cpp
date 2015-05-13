@@ -62,7 +62,7 @@ void Game::createPlayer()
 		ret.x = lua_tonumber(L, -1);
 		lua_pop(L, 1);
 	}
-	player = new GameObject(ret, glm::vec3(1, 0, 0), 0.8, 0.8);
+	player = new GameObject(ret, "red", 0.8, 0.8);
 	lua_pop(L, 1);
 }
 
@@ -85,7 +85,7 @@ void Game::createGoal()
 	ret.x = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 
-	goal = new GameObject(ret, glm::vec3(1, 0, 0), 0.4, 0.4);
+	goal = new GameObject(ret, "red", 0.4, 0.4);
 	lua_pop(L, 1);
 }
 
@@ -128,7 +128,7 @@ void Game::createObject(int index)
 		pos.x = lua_tonumber(L, -1);
 		lua_pop(L, 1);
 	}
-	allObjects[index] = new GameObject(pos, col, scale.x, scale.y);
+	allObjects[index] = new GameObject(pos, "yellow", scale.x, scale.y);
 	lua_pop(L, 1);
 }
 
@@ -465,7 +465,7 @@ void Game::loadMap()
 			float pY = atof(token.c_str());
 			if (player)
 				delete player;
-			player = new GameObject(vec2(pX, pY), glm::vec3(1, 0, 0), 0.8, 0.8);
+			player = new GameObject(vec2(pX, pY), "red", 0.8, 0.8);
 		}
 
 		else if (token == "goal")
@@ -478,7 +478,7 @@ void Game::loadMap()
 			float gY = atof(token.c_str());
 			if (goal)
 				delete goal;
-			goal = new GameObject(vec2(gX, gY), glm::vec3(1, 0, 0), 0.4, 0.4);
+			goal = new GameObject(vec2(gX, gY), "red", 0.4, 0.4);
 		}
 
 		else if (token == "nrOfObjects")
