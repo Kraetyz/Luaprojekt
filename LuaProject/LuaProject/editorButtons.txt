@@ -26,6 +26,18 @@ function setEmptyMode()
 	setMode(0);
 end
 
+function setGreenColor()
+	editorColor("green");
+end
+
+function setYellowColor()
+	editorColor("yellow");
+end
+
+function setBlueColor()
+	editorColor("blue");
+end
+
 exitButton = {-15, -5, -13, -7, "ExitGame.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
 menuButton = {-12, -5, -10, -7, "Menu.bmp", goToMenu} -- NWx, NWy, SEx, SEy, name, function
 clickButton = {-4, 10, 16, -10, "Invisible", clickScreen} -- NWx, NWy, SEx, SEy, name, function
@@ -33,5 +45,9 @@ wallPlaceButton = {-15, 8, -13, 6, "HEIL.bmp", setWallPlaceMode}
 playerPlaceButton = {-15, 5, -13, 3, "HEIL.bmp", setPlayerPlaceMode}
 goalPlaceButton = {-15, 2, -13, 0, "HEIL.bmp", setGoalPlaceMode}
 
-nrOfButtons = 6
-buttonList = {exitButton, menuButton, clickButton, wallPlaceButton, playerPlaceButton, goalPlaceButton}
+greenButton = {-12.5, 7.5, -11.5, 6.5, "HEIL.bmp", setGreenColor}
+yellowButton = {-11, 7.5, -10, 6.5, "HEIL.bmp", setYellowColor}
+blueButton = {-9.5, 7.5, -8.5, 6.5, "HEIL.bmp", setBlueColor}
+
+nrOfButtons = 9
+buttonList = {exitButton, menuButton, clickButton, wallPlaceButton, playerPlaceButton, goalPlaceButton, greenButton, yellowButton, blueButton}

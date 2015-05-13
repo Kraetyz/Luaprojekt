@@ -28,8 +28,8 @@ private:
 	int luaErrorHandlerPos = 0;
 
 	void goalUpdate();
-	void createGoal();
-	void createPlayer();
+	void createGoal(glm::vec2 pos);
+	void createPlayer(glm::vec2 pos);
 	void createObject(glm::vec2 pos, string col);
 
 	void expandObjectArray();

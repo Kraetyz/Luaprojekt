@@ -46,52 +46,18 @@ Editor::~Editor()
 	lua_close(L);
 }
 
-void Editor::createPlayer()
+void Editor::createPlayer(glm::vec2 pos)
 {
-	lua_getglobal(L, "ErrorHandler");
-	luaErrorHandlerPos = lua_gettop(L);
-	vec2 ret;
-	lua_getglobal(L, "getObject");
-	lua_pushinteger(L, -1);
-	int error = lua_pcall(L, 1, 2, luaErrorHandlerPos);
-	if (error)
-	{
-		std::cout << " ERROR: " << std::endl;
-		std::cout << lua_tostring(L, -1) << std::endl;
-		lua_pop(L, 1);
-	}
-	else
-	{
-		ret.y = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-		ret.x = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-	}
-	player = new GameObject(ret, glm::vec3(1, 0, 0), 0.8, 0.8);
-	lua_pop(L, 1);
+	if (player)
+		delete player;
+	player = new GameObject(pos, glm::vec3(1, 0, 0), 0.8, 0.8);
 }
 
-void Editor::createGoal()
+void Editor::createGoal(glm::vec2 pos)
 {
-	lua_getglobal(L, "ErrorHandler");
-	luaErrorHandlerPos = lua_gettop(L);
-	vec2 ret;
-	lua_getglobal(L, "getObject");
-	lua_pushinteger(L, -2);
-	int error = lua_pcall(L, 1, 2, luaErrorHandlerPos);
-	if (error)
-	{
-		std::cout << " ERROR: " << std::endl;
-		std::cout << lua_tostring(L, -1) << std::endl;
-		lua_pop(L, 1);
-	}
-	ret.y = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	ret.x = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-
-	goal = new GameObject(ret, glm::vec3(1, 0, 0), 0.4, 0.4);
-	lua_pop(L, 1);
+	if (goal)
+		delete goal;
+	goal = new GameObject(pos, glm::vec3(1, 0, 0), 0.4, 0.4);
 }
 
 void Editor::createObject(glm::vec2 pos, string col)
@@ -192,15 +158,25 @@ void Editor::saveMap()
 
 	out << line << endl;
 
-	
 
 
+}
 
 void Editor::giveCursorPos(glm::vec2 pos)
 {
 	if (mode == 1 && clickTimer < FLT_EPSILON)
 	{
 		createObject(pos, currentColor);
+		clickTimer = 0.3f;
+	}
+	if (mode == 2 && clickTimer < FLT_EPSILON)
+	{
+		createPlayer(pos);
+		clickTimer = 0.3f;
+	}
+	if (mode == 3 && clickTimer < FLT_EPSILON)
+	{
+		createGoal(pos);
 		clickTimer = 0.3f;
 	}
 }

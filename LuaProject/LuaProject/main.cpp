@@ -126,6 +126,16 @@ static int setMode(lua_State* L)
 	return 0;
 }
 
+static int setColor(lua_State* L)
+{
+	string color = lua_tostring(L, -1);
+	lua_pop(L, 1);
+	
+	((Editor*)state)->setCurrentColor(color);
+
+	return 0;
+}
+
 void clickUpdate()
 {
 	POINT pCur;
@@ -156,6 +166,14 @@ void buttonRender()
 void Update()
 {
 	string msg = state->update();
+	if (msg == "GOOOOOAAAAAAL")
+	{
+		delete state;
+		state = new Menu();
+		if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
+			throw;
+		setupButtons();
+	}
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	buttonRender();
@@ -171,6 +189,7 @@ void registerLuaFuncs()
 	lua_register(buttonState, "click", screenClick);
 	lua_register(buttonState, "setMode", setMode);
 	lua_register(buttonState, "backToMenu", goToMenu);
+	lua_register(buttonState, "editorColor", setColor);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
