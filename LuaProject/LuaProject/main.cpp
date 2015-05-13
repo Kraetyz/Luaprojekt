@@ -13,6 +13,7 @@
 
 #include "Game.h"
 #include "Menu.h"
+#include "Editor.h"
 #include <stdio.h>
 #include <io.h>
 #include <fcntl.h>
@@ -77,6 +78,16 @@ static int goToGame(lua_State* L)
 	return 0;
 }
 
+static int goToEditor(lua_State* L)
+{
+	delete state;
+	state = new Editor();
+	if (luaL_loadfile(buttonState, "editorButtons.txt") || lua_pcall(buttonState, 0, 0, 0))
+		throw;
+	setupButtons();
+	return 0;
+}
+
 static int restartGame(lua_State* L)
 {
 	((Game*)state)->restart();
@@ -122,6 +133,7 @@ void registerLuaFuncs()
 	lua_register(buttonState, "execute", killThroughLua);
 	lua_register(buttonState, "startGame", goToGame);
 	lua_register(buttonState, "restartGame", restartGame);
+	lua_register(buttonState, "startEditor", goToEditor);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

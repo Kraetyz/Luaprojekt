@@ -4,7 +4,7 @@
 Editor::Editor()
 {
 	L = luaL_newstate();
-	luaL_openlibs(L); /* opens the standard libraries */
+	luaL_openlibs(L); // opens the standard libraries
 	if (luaL_loadfile(L, "Error.lua") || lua_pcall(L, 0, 0, 0))
 	{
 		std::cout << "Error handler failed" << std::endl;
@@ -172,6 +172,7 @@ void Editor::Render()
 
 string Editor::update()
 {
+	/*
 	lua_getglobal(L, "ErrorHandler");
 	luaErrorHandlerPos = lua_gettop(L);
 	int error = 0;
@@ -212,11 +213,9 @@ string Editor::update()
 		render->setClearColor(r, g, b);
 	}
 
-	
-
 	this->goalUpdate();
 
-	
+	*/
 	return "";
 }
 
