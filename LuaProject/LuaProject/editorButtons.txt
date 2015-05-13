@@ -1,6 +1,13 @@
-buttonone = {-15, -5, -13, -7, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
-buttontwo = {-3, 7, 3, 5, "Hej.bmp"} -- NWx, NWy, SEx, SEy, name
-buttonthree = {-3, -4, 3, -6, "HEIL.bmp"} -- NWx, NWy, SEx, SEy, name
+function click()
+	click();
+end
 
-nrOfButtons = 3
-buttonList = {buttonone, buttontwo, buttonthree}
+function exitGame()
+	execute();
+end
+
+exitButton = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
+clickButton = {-4, 10, 16, -10, "Hej.bmp", click} -- NWx, NWy, SEx, SEy, name, function
+
+nrOfButtons = 2
+buttonList = {exitButton, clickButton}

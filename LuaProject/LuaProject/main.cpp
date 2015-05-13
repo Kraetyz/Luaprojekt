@@ -26,6 +26,7 @@ lua_State* buttonState;
 Button buttons[10];
 int nrOfButtons = 0;
 
+HWND window;
 State* state;
 
 HWND InitWindow(HINSTANCE hInstance);
@@ -94,11 +95,22 @@ static int restartGame(lua_State* L)
 	return 0;
 }
 
-void clickUpdate(HWND* window)
+static int screenClick(lua_State* L)
 {
 	POINT pCur;
 	GetCursorPos(&pCur);
-	ScreenToClient(*window, &pCur);
+	ScreenToClient(window, &pCur);
+	float mouseX = ((pCur.x - (1280 / 2)) / 640.0f) * 15;
+	float mouseY = (-(pCur.y - (768 / 2)) / 366.0f) * 9;
+	//((Editor*)state)->giveCursorPos(glm::vec2(mouseX, mouseY));
+	return 0;
+}
+
+void clickUpdate()
+{
+	POINT pCur;
+	GetCursorPos(&pCur);
+	ScreenToClient(window, &pCur);
 	lua_getglobal(buttonState, "clickCheck");
 	lua_getglobal(buttonState, "nrOfButtons");
 	int buttonNr = lua_tointeger(buttonState, -1);
@@ -134,12 +146,13 @@ void registerLuaFuncs()
 	lua_register(buttonState, "startGame", goToGame);
 	lua_register(buttonState, "restartGame", restartGame);
 	lua_register(buttonState, "startEditor", goToEditor);
+	lua_register(buttonState, "click", screenClick);
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg = { 0 };
-	HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
+	window = InitWindow(hInstance); //1. Skapa fönster
 
 
 	AllocConsole();
@@ -156,17 +169,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	setvbuf(hf_in, NULL, _IONBF, 128);
 	*stdin = *hf_in;
 
-	if (wndHandle)
+	if (window)
 	{
-		HDC hDC = GetDC(wndHandle);
-		HGLRC hRC = CreateOpenGLContext(wndHandle); //2. Skapa och koppla OpenGL context
+		HDC hDC = GetDC(window);
+		HGLRC hRC = CreateOpenGLContext(window); //2. Skapa och koppla OpenGL context
 
 		glewInit(); //3. Initiera The OpenGL Extension Wrangler Library (GLEW)
 		//glEnable(GL_CULL_FACE);
 
 		SetViewport(); //4. Sätt viewport
 
-		ShowWindow(wndHandle, nCmdShow);
+		ShowWindow(window, nCmdShow);
 
 		state = new Menu();
 
@@ -196,7 +209,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		while (WM_QUIT != msg.message)
 		{
 			if (msg.message == WM_LBUTTONDOWN)
-				clickUpdate(&wndHandle);
+				clickUpdate();
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
@@ -211,9 +224,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 
 		wglMakeCurrent(NULL, NULL);
-		ReleaseDC(wndHandle, hDC);
+		ReleaseDC(window, hDC);
 		wglDeleteContext(hRC);
-		DestroyWindow(wndHandle);
+		DestroyWindow(window);
 	}
 
 	lua_close(buttonState);

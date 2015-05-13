@@ -31,5 +31,7 @@ public:
 	~Editor();
 	void Render();
 	string update();
+
+	void giveCursorPos(glm::vec2 pos);
 };
 #endif

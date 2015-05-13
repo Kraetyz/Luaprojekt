@@ -223,3 +223,8 @@ void Editor::goalUpdate()
 {
 	this->goal->updateColor();
 }
+
+void Editor::giveCursorPos(glm::vec2 pos)
+{
+
+}
