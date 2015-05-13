@@ -26,8 +26,8 @@ Editor::Editor()
 		std::cerr << lua_tostring(L, -1) << std::endl;
 		lua_pop(L, 1);
 	}
-	createPlayer();
-	createGoal();
+	//createPlayer();
+	//createGoal();
 	lua_getglobal(L, "NUMBEROFOBJECTS");
 	nrOfObjects = lua_tointeger(L, -1);
 	lua_pop(L, 1);
@@ -35,10 +35,7 @@ Editor::Editor()
 	for (int c = 0; c < nrOfObjects; c++)
 		createObject(c);
 
-	lua_getglobal(L, "RADIUS");
-	float rad = lua_tonumber(L, -1);
-	render->setRadius(rad);
-	lua_pop(L, 1);
+	render->setRadius(20.0f);
 	lua_getglobal(L, "BACKR");
 	float r = lua_tonumber(L, -1);
 	lua_getglobal(L, "BACKG");
@@ -158,15 +155,15 @@ void Editor::createObject(int index)
 void Editor::Render()
 {
 	render->setProgram();
-	render->Render(player, player);
+	if (player)
+		render->Render(player, player);
 	for (int c = 0; c < nrOfObjects; c++)
 	{
 		render->Render(allObjects[c]);
 	}
 
-	render->Render(goal);
-
-
+	if (goal)
+		render->Render(goal);
 }
 
 string Editor::update()
