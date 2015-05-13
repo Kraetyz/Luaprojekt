@@ -226,5 +226,5 @@ void Editor::goalUpdate()
 
 void Editor::giveCursorPos(glm::vec2 pos)
 {
-
+	
 }

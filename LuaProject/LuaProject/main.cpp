@@ -102,7 +102,7 @@ static int screenClick(lua_State* L)
 	ScreenToClient(window, &pCur);
 	float mouseX = ((pCur.x - (1280 / 2)) / 640.0f) * 15;
 	float mouseY = (-(pCur.y - (768 / 2)) / 366.0f) * 9;
-	//((Editor*)state)->giveCursorPos(glm::vec2(mouseX, mouseY));
+	((Editor*)state)->giveCursorPos(glm::vec2(mouseX, mouseY));
 	return 0;
 }
 

@@ -1,4 +1,4 @@
-function click()
+function clickScreen()
 	click();
 end
 
@@ -7,7 +7,7 @@ function exitGame()
 end
 
 exitButton = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
-clickButton = {-4, 10, 16, -10, "Hej.bmp", click} -- NWx, NWy, SEx, SEy, name, function
+clickButton = {-4, 10, 16, -10, "Hej.bmp", clickScreen} -- NWx, NWy, SEx, SEy, name, function
 
 nrOfButtons = 2
 buttonList = {exitButton, clickButton}

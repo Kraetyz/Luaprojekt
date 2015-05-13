@@ -116,7 +116,6 @@
     <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="EditorButt.txt" />
     <Text Include="editorButtons.txt" />
     <Text Include="gameButt.txt" />
     <Text Include="map.txt" />

@@ -103,9 +103,6 @@
     <Text Include="gameButt.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="EditorButt.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Error.lua">
