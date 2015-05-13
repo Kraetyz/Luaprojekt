@@ -20,15 +20,18 @@ class GameObject
 private:
 	vec2 corners[4];
 	vec3 color;
+	string clr;
+	vec2 origPos;
 protected:
 	void setPos(vec2 pos);
 	void setColor(vec3 col);
 public:
 	GameObject();
-	GameObject(vec2 pos, vec3 rgb, float sizeX, float sizeY);
 	GameObject(vec2 pos, string clr, float sizeX, float sizeY);
 	void getCorners(vec2 toFill[]);
 	vec3 getColor();
+	string getColorString();
+	vec2 getOrigPos();
 	void updateColor();
 	void goalUpdate();
 	void moveX(float newX, int index);

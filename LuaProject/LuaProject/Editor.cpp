@@ -1,6 +1,7 @@
 #include "Editor.h"
 #include "Windows.h"
 #include <fstream>
+#include <sstream>
 
 Editor::Editor()
 {
@@ -50,14 +51,14 @@ void Editor::createPlayer(glm::vec2 pos)
 {
 	if (player)
 		delete player;
-	player = new GameObject(pos, glm::vec3(1, 0, 0), 0.8, 0.8);
+	player = new GameObject(ret, "red", 0.8, 0.8);
 }
 
 void Editor::createGoal(glm::vec2 pos)
 {
 	if (goal)
 		delete goal;
-	goal = new GameObject(pos, glm::vec3(1, 0, 0), 0.4, 0.4);
+	goal = new GameObject(ret, "green", 0.4, 0.4);
 }
 
 void Editor::createObject(glm::vec2 pos, string col)
@@ -113,53 +114,73 @@ void Editor::saveMap()
 	ofstream out;
 	out.open("Map1.txt");
 
-	string line = "radius 0.2";
+	stringstream line;
+	line << "radius 0.2";
 
-	out << line << endl;
+	out << line.str() << endl;
 
-	line = "fog 0.1 0.2 0.3";
+	line = stringstream();
+	line << "fog 0.1 0.2 0.3";
 
-	out << line << endl;
+	out << line.str() << endl;
 
 	float playerX;
 	float playerY;
 
-	vec2 Corners[4];
+	vec2 pos;
 	if (player)
 	{
-		player->getCorners(Corners);
+		pos = player->getOrigPos();
 
-		playerX = Corners[0].x + 0.01;
-		playerY = Corners[0].y - 0.01;
+		playerX = pos.x;
+		playerY = pos.y;
 	}
 	else
 	{
 		playerX = 0;
 		playerY = 0;
 	}
-	line = "player " + char(playerX) + char(" ") + char(playerY);
+	line = stringstream();
+	line << "player " << playerX << " " << playerY;
 
-	out << line << endl;
+	out << line.str() << endl;
 
 	float goalX, goalY;
 	if (goal)
 	{
-		goal->getCorners(Corners);
+		goal->getOrigPos();
 
-		goalX = Corners[0].x + 0.01;
-		goalY = Corners[0].y - 0.01;
+		goalX = pos.x;
+		goalY = pos.y;
 	}
 	else
 	{
 		goalX = 2;
 		goalY = 2;
 	}
-	line = "goal " + char(goalX) + char(" ") + char(goalY);
+	line = stringstream();
+	line << "goal " << goalX << " " << goalY;
 
-	out << line << endl;
+	out << line.str() << endl;
 
+	line = stringstream();
+	line << "nrOfObjects " << nrOfObjects;
+	out << line.str() << endl;
 
+	float wX = 0, wY = 0;
+	string clr;
+	for (int i = 0; i < nrOfObjects; i++)
+	{
+		//wall - 3 4 green
+		pos = allObjects[i]->getOrigPos();
 
+		wX = pos.x;
+		wY = pos.y;
+		line = stringstream();
+		line << "wall " << wX << " " << wY << " " << allObjects[i]->getColorString();
+
+		out << line.str() << endl;
+	}
 }
 
 void Editor::giveCursorPos(glm::vec2 pos)

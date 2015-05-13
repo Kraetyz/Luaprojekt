@@ -71,6 +71,7 @@ static int killThroughLua(lua_State* L)
 
 static int goToMenu(lua_State* L)
 {
+	((Editor*)state)->saveMap();
 	delete state;
 	state = new Menu();
 	if (luaL_loadfile(buttonState, "menuButtons.txt") || lua_pcall(buttonState, 0, 0, 0))

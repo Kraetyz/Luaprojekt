@@ -4,7 +4,7 @@ Button::Button() : GameObject()
 {
 }
 
-Button::Button(vec2 pos, vec2 size, string name) : GameObject(pos, vec3(0, 0, 0), size.x, size.y)
+Button::Button(vec2 pos, vec2 size, string name) : GameObject(pos, "green", size.x, size.y)
 {
 	this->name = name;
 	if (name != "Invisible")
