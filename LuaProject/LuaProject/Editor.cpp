@@ -23,6 +23,7 @@ Editor::Editor()
 		lua_pop(L, 1);
 	}
 
+	render->setRadius(20.0f);
 	render->setClearColor(0.1f, 0.2f, 0.3f);
 	lua_pop(L, 1);
 
@@ -51,14 +52,14 @@ void Editor::createPlayer(glm::vec2 pos)
 {
 	if (player)
 		delete player;
-	player = new GameObject(ret, "red", 0.8, 0.8);
+	player = new GameObject(pos, "red", 0.8, 0.8);
 }
 
 void Editor::createGoal(glm::vec2 pos)
 {
 	if (goal)
 		delete goal;
-	goal = new GameObject(ret, "green", 0.4, 0.4);
+	goal = new GameObject(pos, "green", 0.4, 0.4);
 }
 
 void Editor::createObject(glm::vec2 pos, string col)
