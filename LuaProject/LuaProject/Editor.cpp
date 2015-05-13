@@ -23,6 +23,12 @@ Editor::Editor()
 
 	render->setClearColor(0.1f, 0.2f, 0.3f);
 	lua_pop(L, 1);
+
+	nrOfObjects = 0;
+	objectMax = 20;
+	allObjects = new GameObject*[objectMax];
+
+	currentColor = "green";
 }
 
 Editor::~Editor()
@@ -87,47 +93,24 @@ void Editor::createGoal()
 	lua_pop(L, 1);
 }
 
-void Editor::createObject(int index)
+void Editor::createObject(glm::vec2 pos, string col)
 {
-	lua_getglobal(L, "ErrorHandler");
-	luaErrorHandlerPos = lua_gettop(L);
-	vec2 scale;
-	vec2 pos;
-	vec3 col = vec3(0.5, 0.5, 0.5);
-	lua_getglobal(L, "getObject");
-	lua_pushinteger(L, index);
-	int error = lua_pcall(L, 1, 5, luaErrorHandlerPos);
-	if (error)
+	allObjects[nrOfObjects] = new GameObject(pos, col, 1, 1);
+	nrOfObjects++;
+	if (nrOfObjects == objectMax)
+		expandObjectArray();
+}
+
+void Editor::expandObjectArray()
+{
+	GameObject** temp = new GameObject*[objectMax + 10];
+	for (int c = 0; c < nrOfObjects; c++)
 	{
-		std::cout << " ERROR: " << std::endl;
-		std::cout << lua_tostring(L, -1) << std::endl;
-		lua_pop(L, 1);
+		temp[c] = allObjects[c];
 	}
-	else
-	{
-		scale.y = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-		scale.x = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-		std::string color = lua_tostring(L, -1);
-		if (color == "red")
-			col = vec3(1, 0, 0);
-		if (color == "green")
-			col = vec3(0, 1, 0);
-		if (color == "blue")
-			col = vec3(0, 0, 1);
-		if (color == "white")
-			col = vec3(1, 1, 1);
-		if (color == "black")
-			col = vec3(0, 0, 0);
-		lua_pop(L, 1);
-		pos.y = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-		pos.x = lua_tonumber(L, -1);
-		lua_pop(L, 1);
-	}
-	allObjects[index] = new GameObject(pos, col, scale.x, scale.y);
-	lua_pop(L, 1);
+	delete[]allObjects;
+	allObjects = temp;
+	objectMax += 10;
 }
 
 void Editor::Render()
@@ -146,59 +129,23 @@ void Editor::Render()
 
 string Editor::update()
 {
-	/*
-	lua_getglobal(L, "ErrorHandler");
-	luaErrorHandlerPos = lua_gettop(L);
-	int error = 0;
-	vec2 corners[4];
-	player->getCorners(corners);
-	vec2 tempCorners[4] = { vec2(corners[0]), vec2(corners[1]), vec2(corners[2]), vec2(corners[3]) };
-
-	if (GetKeyState('R') && GetAsyncKeyState('R'))
-	{
-		if (luaL_loadfile(L, "testscript.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-		{
-			std::cout << " ERROR: " << std::endl;
-			std::cout << lua_tostring(L, -1) << std::endl;
-			lua_pop(L, 1);
-		}
-		if (luaL_loadfile(L, "map.txt") || lua_pcall(L, 0, 0, luaErrorHandlerPos))
-		{
-			std::cout << " ERROR: " << std::endl;
-			std::cout << lua_tostring(L, -1) << std::endl;
-			lua_pop(L, 1);
-		}
-		delete player;
-		createPlayer();
-		for (int c = 0; c < nrOfObjects; c++)
-		{
-			delete allObjects[c];
-			createObject(c);
-		}
-		lua_getglobal(L, "RADIUS");
-		render->setRadius(lua_tonumber(L, -1));
-		lua_getglobal(L, "BACKR");
-		float r = lua_tonumber(L, -1);
-		lua_getglobal(L, "BACKG");
-		float g = lua_tonumber(L, -1);
-		lua_getglobal(L, "BACKB");
-		float b = lua_tonumber(L, -1);
-		lua_pop(L, 3);
-		render->setClearColor(r, g, b);
-	}
-
-	this->goalUpdate();
-
-	*/
+	if (clickTimer > FLT_EPSILON)
+		clickTimer -= 0.016;
+	goalUpdate();
 	return "";
 }
 
 void Editor::goalUpdate()
 {
-	this->goal->updateColor();
+	if (goal)
+		goal->updateColor();
 }
 
 void Editor::giveCursorPos(glm::vec2 pos)
 {
-	
+	if (mode == 1 && clickTimer < FLT_EPSILON)
+	{
+		createObject(pos, currentColor);
+		clickTimer = 0.3f;
+	}
 }
