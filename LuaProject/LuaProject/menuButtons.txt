@@ -11,7 +11,7 @@ function goToEditor()
 end
 
 buttonone = {-15, -5, -13, -7, "Hej.bmp", exitGame} -- NWx, NWy, SEx, SEy, name, function
-buttontwo = {-3, 7, 3, 5, "Hej.bmp", startItUp} -- NWx, NWy, SEx, SEy, name, function
+buttontwo = {-3, 7, 3, 3, "PlayGame.bmp", startItUp} -- NWx, NWy, SEx, SEy, name, function
 buttonthree = {-3, -4, 3, -6, "HEIL.bmp", goToEditor} -- NWx, NWy, SEx, SEy, name, function
 
 nrOfButtons = 3
